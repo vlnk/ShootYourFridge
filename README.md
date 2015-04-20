@@ -8,7 +8,7 @@ The wonderfull project leaded by Michèle, Robin, Hélias and Valentin is very v
 - Récupération des codes barres
 - Lecture des QR Codes
 
-### Ce qu'il faut faire
+## Ce qu'il faut faire
 
 * Récupération du produit à partir du QRCode/CodeBarre (ex : Open Food Facts...)
 * Faire une BD correspondance (liste d'aliments)
@@ -17,12 +17,12 @@ The wonderfull project leaded by Michèle, Robin, Hélias and Valentin is very v
    - Matching Aliment/Recette
 * Affichage sympathique des recettes (interface sommaire mais fonctionnelle)
 
-### Ce qu'il faut absolument FAIRE
+## Ce qu'il faut absolument FAIRE
 
 * Tout le monde peut coder android sereinement (Michèle OK, Robin OKICH, Hélias OKICH, Valentin SAC A MERDE)
 * C'est finir l'application à temps
 
-### Points sensibles
+## Points sensibles
 
 * Possibilité de tester la caméra sur émulateur
 * Possibilité de tester les BD
