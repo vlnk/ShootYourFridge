@@ -27,6 +27,35 @@
                 android:textIsSelectable="true"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/scan_format" />
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:orientation="horizontal">
+            <EditText
+                    android:id="@+id/add_aliment_text"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_aliment" />
+            <Button
+                    android:id="@+id/add_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_button" />
+        </LinearLayout>
+        <ListView
+                android:id="@+id/aliments_list"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_weight="1"
+                android:layout_marginTop="150dp"/>
+        <Button
+                android:id="@+id/validate_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="460dp"
+                android:text="@string/validate_button" android:layout_marginBottom="0dp"/>
     </RelativeLayout>
 </LinearLayout>
 

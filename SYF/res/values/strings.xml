@@ -2,5 +2,8 @@
 <resources>
     <string name="app_name">SYF</string>
     <string name="scan">Scan</string>
+    <string name="add_button">Add</string>
+    <string name="add_aliment">Add Aliment</string>
+    <string name="validate_button">Validate List</string>
 </resources>
 
