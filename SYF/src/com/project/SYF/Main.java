@@ -1,7 +1,10 @@
 package com.project.SYF;
 
 import android.app.Activity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
@@ -15,8 +18,14 @@ import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import org.json.JSONObject;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+
 
 
 public class Main extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener{
@@ -35,6 +44,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.main);
 
         //Scan button
@@ -70,23 +80,42 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         }
         if(v.getId()==R.id.scan_button){
             //scan
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
+       //     IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+       //     scanIntegrator.initiateScan();
+
+            //lancer le thread
+            AsyncTaskClass mTask = new AsyncTaskClass(this, "3029330003533");
+            mTask.execute();
+
         }
         if(v.getId()==R.id.add_button){
-            String cour = addAlimentText.getText().toString();
-            boolean estdeja = false;
-            for (int i = 0; i < mNameList.size(); i++)
-            {
-                if (mNameList.get(i).compareTo(cour) == 0)
-                    estdeja = true;
-            }
-            if (!estdeja) {
-                mNameList.add(cour);
-                mArrayAdapter.notifyDataSetChanged();
-            }
-            addAlimentText.setText("");
+            pushAddButton(addAlimentText.getText().toString());
         }
+
+  /*      try {
+            URL url = new URL("http://www.vogella.com");
+            HttpURLConnection con = (HttpURLConnection) url
+                    .openConnection();
+            readStream(con.getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    */
+    }
+
+
+    public void pushAddButton(String toListText){
+        boolean estdeja = false;
+        for (int i = 0; i < mNameList.size(); i++)
+        {
+            if (mNameList.get(i).compareTo(toListText) == 0)
+                estdeja = true;
+        }
+        if (!estdeja) {
+            mNameList.add(toListText);
+            mArrayAdapter.notifyDataSetChanged();
+        }
+        addAlimentText.setText("");
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -116,4 +145,30 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         mArrayAdapter.notifyDataSetChanged();
         //Log.d("omg android", position + ": " + mNameList.get(position));
     }
+
+/*
+    private void readStream(InputStream in) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(in));
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                addAlimentText.setText(line);
+                mNameList.add(addAlimentText.getText().toString());
+                mArrayAdapter.notifyDataSetChanged();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+*/
+
 }
