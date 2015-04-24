@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/tests-generation/tests-generation.iml" filepath="$PROJECT_DIR$/tests-generation/tests-generation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SYF/SYF.iml" filepath="$PROJECT_DIR$/SYF/SYF.iml" />
     </modules>
   </component>
 </project>
