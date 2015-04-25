@@ -21,7 +21,7 @@ public class RechercheRecette extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.main);
+        setContentView(R.layout.rechercherecette);
 
         Intent intent = getIntent();
         mAlimentList = intent.getStringArrayListExtra("ingredients");
@@ -38,5 +38,14 @@ public class RechercheRecette extends Activity{
             }
         });
 
+        AsyncRechercheRecettes mTask = new AsyncRechercheRecettes(this, mAlimentList);
+        mTask.execute();
+
+    }
+
+    public void putURL(String url){
+        mAlimentList.clear();
+        mAlimentList.add(url);
+        mAlimentListAdapter.notifyDataSetChanged();
     }
 }

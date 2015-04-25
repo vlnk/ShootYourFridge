@@ -34,6 +34,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
      */
     private Button scanBtn;
     private Button addBtn;
+    private Button validBtn;
     private TextView formatTxt, contentTxt, resultsTxt;
     private EditText addAlimentText;
 
@@ -95,6 +96,10 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 mArrayAdapter.notifyDataSetChanged();
             }
         });
+
+        //Validate Button
+        validBtn = (Button) findViewById(R.id.validate_button);
+        validBtn.setOnClickListener(this);
     }
 
 
@@ -103,19 +108,23 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         if(v.getId()==R.id.add_aliment_text) {
             addAlimentText.setText(addAlimentText.getText().toString());
         }
-        else if(v.getId()==R.id.scan_button){
+        if(v.getId()==R.id.scan_button){
             //scan + lancement recherche du produit (dans OnActivityResult)
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
 
 
         }
-        else if(v.getId()==R.id.add_button){
+        if(v.getId()==R.id.add_button){
             pushAddButton(addAlimentText.getText().toString(), false);
         }
-        else if(v.getId()==R.id.validate_button){
+        if(v.getId()==R.id.validate_button){
+            Toast toast = Toast.makeText(getApplicationContext(),
+                    "Changement d'activité?", Toast.LENGTH_SHORT);
+            toast.show();
             Intent validateIntent = new Intent(this, RechercheRecette.class);
             validateIntent.putExtra("ingredients", mNameList);
+            startActivity(validateIntent);
         }
 
   /*      try {
