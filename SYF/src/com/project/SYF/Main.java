@@ -119,9 +119,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
             pushAddButton(addAlimentText.getText().toString(), false);
         }
         if(v.getId()==R.id.validate_button){
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Changement d'activité?", Toast.LENGTH_SHORT);
-            toast.show();
+
             Intent validateIntent = new Intent(this, RechercheRecette.class);
             validateIntent.putExtra("ingredients", mNameList);
             startActivity(validateIntent);

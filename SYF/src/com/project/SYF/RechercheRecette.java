@@ -35,6 +35,7 @@ public class RechercheRecette extends ListActivity {
     private static final String TAG_NAME = "name";
     private static final String TAG_DETAILS = "details";
     private static final String TAG_DESCRIPTION = "description";
+    private static final String TAG_HREF = "href";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,13 +70,13 @@ public class RechercheRecette extends ListActivity {
 
         Elements recettes = document.getElementsByClass("m_contenu_resultat");
 
+
         for(Element recette : recettes) {
             Element titreDiv = recette.getElementsByClass("m_titre_resultat").first();
 
-            Elements titreA = null;
-            if((titreA = titreDiv.getElementsByAttribute("a")) == null)
+            Element lienTitre = null;
+            if((lienTitre = titreDiv.getElementsByTag("a").first()) == null)
                 continue;
-            Element lienTitre = titreA.first();
             String titreHref  = lienTitre.attr("href");
             String titre = lienTitre.attr("title");
 
@@ -84,6 +85,20 @@ public class RechercheRecette extends ListActivity {
 
             Element descriptionDiv = recette.getElementsByClass("m_texte_resultat").first();
             String description = descriptionDiv.text();
+
+            // tmp hashmap for single contact
+            HashMap<String, String> uneRecette = new HashMap<String, String>();
+
+
+            // adding each child node to HashMap key => value
+            uneRecette.put(TAG_NAME, titre);
+            uneRecette.put(TAG_DETAILS, detail);
+            uneRecette.put(TAG_DESCRIPTION, description);
+            uneRecette.put(TAG_HREF, titreHref);
+
+            // adding contact to contact list
+            recetteList.add(uneRecette);
+
         }
 
         //actualiser la liste
