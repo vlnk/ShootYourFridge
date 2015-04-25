@@ -17,13 +17,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 /**
- * Created by annesohier on 25/04/2015.
+ * Created by robinvermes on 25/04/2015.
  */
 public class AffichageRecette extends Activity {
 
     private static String mHref;
-    private static TextView mTemps;
+    private static TextView mTempsPrepa;
+    private static TextView mTempsCuisson;
     private static TextView mIngredients;
+    private static TextView mTitrePreparation;
     private static TextView mPreparation;
 
     @Override
@@ -35,10 +37,11 @@ public class AffichageRecette extends Activity {
         Intent intent = getIntent();
         mHref = intent.getStringExtra("href");
 
-        mTemps = (TextView)findViewById(R.id.temps);
+        mTempsPrepa = (TextView)findViewById(R.id.temps_preparation);
+        mTempsCuisson = (TextView)findViewById(R.id.temps_cuisson);
         mIngredients = (TextView)findViewById(R.id.ingredients);
-        mPreparation = (TextView)findViewById(R.id.preparation);
-
+        mTitrePreparation = (TextView)findViewById(R.id.titre_preparation);
+        mPreparation =  (TextView)findViewById(R.id.preparation);
 
         AsyncGetRecette mTask = new AsyncGetRecette(this, mHref);
         mTask.execute();
@@ -56,8 +59,22 @@ public class AffichageRecette extends Activity {
         String ingredients = recetteIngredients.text();
         String infos = recetteInfo.text();
 
-        mTemps.setText(duree);
+        int idx = duree.indexOf("Temps de cuisson");
+        String preparation = duree.substring(0, idx);
+        String cuisson = duree.substring(idx);
+
+        ingredients = ingredients.replace("- ", "\n- ");
+
+        idx = infos.indexOf(": ") + 1;
+        String titrePreparation = infos.substring(0, idx);
+        String contenuPreparation = infos.substring(idx+1);
+        contenuPreparation = contenuPreparation.replace(". ", ".\n");
+        contenuPreparation = contenuPreparation.replace("Remarques :", "\n\nRemarques :");
+
+        mTempsPrepa.setText(preparation);
+        mTempsCuisson.setText(cuisson);
         mIngredients.setText(ingredients);
-        mPreparation.setText(infos);
+        mTitrePreparation.setText(titrePreparation);
+        mPreparation.setText(contenuPreparation);
     }
 }

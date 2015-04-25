@@ -4,7 +4,16 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <TextView
-            android:id="@+id/temps"
+            android:id="@+id/temps_preparation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2dip"
+            android:paddingTop="6dip"
+            android:textColor="#43bd00"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    <TextView
+            android:id="@+id/temps_cuisson"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="2dip"
@@ -17,8 +26,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:textColor="#5d5d5d"
-            android:textStyle="bold" />
+            android:textColor="#5d5d5d" />
+    <TextView
+            android:id="@+id/titre_preparation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="2dip"
+            android:textColor="#acacac"
+            android:textStyle="bold"/>
     <TextView
             android:id="@+id/preparation"
             android:layout_width="fill_parent"
