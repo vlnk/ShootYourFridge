@@ -44,6 +44,8 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     private ArrayList<String> mNameList = new ArrayList<String>();
     private ArrayList<String> mResultList = new ArrayList<String>();
 
+    private String mCurrentBarCode;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,13 +68,13 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 android.R.layout.simple_list_item_1,
                 mResultList);
         resultListView.setAdapter(mArrayAdapterResult);
-        resultListView.setOnItemClickListener(new ListView.OnItemClickListener(){
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
-                pushAddButton(mResultList.get(position));
+        resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                pushAddButton(mResultList.get(position), true);
             }
         });
 
-        
+
         //Add Button
         addBtn = (Button) findViewById(R.id.add_button);
         addBtn.setOnClickListener(this);
@@ -87,15 +89,12 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 android.R.layout.simple_list_item_1,
                 mNameList);
         mainListView.setAdapter(mArrayAdapter);
-        mainListView.setOnItemClickListener(new ListView.OnItemClickListener(){
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+        mainListView.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mNameList.remove(position);
                 mArrayAdapter.notifyDataSetChanged();
             }
         });
-        mResultList.add("Coucou");
-        mArrayAdapterResult.notifyDataSetChanged();
-
     }
 
 
@@ -105,17 +104,14 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
             addAlimentText.setText(addAlimentText.getText().toString());
         }
         if(v.getId()==R.id.scan_button){
-            //scan
-            //     IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            //     scanIntegrator.initiateScan();
+            //scan + lancement recherche du produit (dans OnActivityResult)
+            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            scanIntegrator.initiateScan();
 
-            //lancer le thread
-            AsyncTaskClass mTask = new AsyncTaskClass(this, "3029330003533");
-            mTask.execute();
 
         }
         if(v.getId()==R.id.add_button){
-            pushAddButton(addAlimentText.getText().toString());
+            pushAddButton(addAlimentText.getText().toString(), false);
         }
 
   /*      try {
@@ -130,13 +126,18 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     }
 
 
-    public void pushAddButton(String toListText){
+    public void pushAddButton(String toListText, boolean withBarCode){
         boolean estdeja = false;
+        if (withBarCode) {
+            //ajouter a la base de donner avec le code barre???
+
+        }
         for (int i = 0; i < mNameList.size(); i++)
         {
             if (mNameList.get(i).compareTo(toListText) == 0)
                 estdeja = true;
         }
+
         if (!estdeja) {
             mNameList.add(toListText);
             mArrayAdapter.notifyDataSetChanged();
@@ -144,16 +145,26 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         addAlimentText.setText("");
     }
 
+    public void replaceAllInKeyWordsList(ArrayList<String> keywordsList){
+        mResultList.clear();
+        mResultList.addAll(keywordsList);
+        mArrayAdapterResult.notifyDataSetChanged();
+    }
+
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         //retrieve scan result
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             //we have a result
-            String scanContent = scanningResult.getContents();
+       /*     String scanContent = scanningResult.getContents();
             String scanFormat = scanningResult.getFormatName();
             formatTxt.setText("FORMAT: " + scanFormat);
             contentTxt.setText("CONTENT: " + scanContent);
-            //addAlimentText.setText(scanContent);
+         */
+            mCurrentBarCode = scanningResult.getContents();
+
+            AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
+            mTask.execute();
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),

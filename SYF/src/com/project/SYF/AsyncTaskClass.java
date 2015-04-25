@@ -1,10 +1,12 @@
 package com.project.SYF;
 
+
 import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -12,6 +14,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,6 +25,8 @@ import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -34,33 +41,44 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     private static final String url2 = ".json";
     private String mUrlString;
     private StringBuilder sb;
+    private static final String TAG_PRODUCT = "product";
+    private static final String TAG_KEYWORDS = "_keywords";
+
+    private ArrayList<String> keywordsList = new ArrayList<String>();
+    private boolean mNoValueFromProduct;
 
     public AsyncTaskClass(Activity mainActivity, String urlEndString) {
         super();
         this.mActivity = new WeakReference<Main>((Main) mainActivity);
         this.mUrlString = urlEndString;
         this.sb = new StringBuilder();
+        mNoValueFromProduct = false;
     }
 
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        mActivity.get().pushAddButton(sb.toString());
+        if (mNoValueFromProduct){
+            Toast toast = Toast.makeText(mActivity.get(),
+                    "No value from product found", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        else{
+            mActivity.get().replaceAllInKeyWordsList(keywordsList);
+        }
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
         String urlS = url1 + mUrlString + url2;
+        String jsonStr;
         InputStream input;
+        JSONObject jSonProduct;
+        JSONArray jSonKeywords;
 
         try {
             input = getInputStreamFromUrl(urlS);
 
-      /*      URL url = new URL(urlS);
-            HttpURLConnection con = (HttpURLConnection) url
-                    .openConnection();
-            input = con.getInputStream();
-        */
             BufferedReader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"), 8);
             String line;
 
@@ -73,7 +91,33 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
+        jsonStr = sb.toString();
+
+        if (jsonStr != null) {
+            try {
+                JSONObject jSonObj = new JSONObject(jsonStr);
+
+                // Getting JSON Array node
+                jSonProduct = jSonObj.getJSONObject(TAG_PRODUCT);
+                jSonKeywords = jSonProduct.getJSONArray(TAG_KEYWORDS);
+
+                // looping through All keywords
+                for (int i = 0; i < jSonKeywords.length(); i++) {
+                    String c = (String) jSonKeywords.get(i);
+
+                    // adding keyword to keywords list
+                    keywordsList.add(c);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                mNoValueFromProduct = true;
+            }
+        } else {
+            Log.e("JSon String null", "Couldn't get any data from the url");
+        }
+
         return null;
+
     }
 
     public static InputStream getInputStreamFromUrl(String url) throws IOException
