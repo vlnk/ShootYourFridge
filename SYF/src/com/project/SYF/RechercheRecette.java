@@ -3,6 +3,7 @@ package com.project.SYF;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import android.widget.ListView;
@@ -24,7 +25,7 @@ import android.widget.TextView;
 /**
  * Created by robinvermes on 25/04/2015.
  */
-public class RechercheRecette extends ListActivity {
+public class RechercheRecette extends ListActivity implements AdapterView.OnItemClickListener{
 
     private ArrayList<String> mAlimentList = new ArrayList<String>();
     private ArrayAdapter<String> mAlimentListAdapter;
@@ -48,17 +49,15 @@ public class RechercheRecette extends ListActivity {
 
         recetteList = new ArrayList<HashMap<String, String>>();
 
-      //  mRecetteListView = (ListView) findViewById(R.id.list_lien_recette);
         mRecetteListView = getListView();
-
 
         mRecetteListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //traitement : lancement de la recette sur internet
+                Intent validateIntent = new Intent(RechercheRecette.this, AffichageRecette.class);
+                validateIntent.putExtra("href", recetteList.get(position).get(TAG_HREF));
+                startActivity(validateIntent);
             }
         });
-
-
 
         AsyncRechercheRecettes mTask = new AsyncRechercheRecettes(this, mAlimentList);
         mTask.execute();
@@ -109,5 +108,10 @@ public class RechercheRecette extends ListActivity {
                 R.id.details, R.id.description });
 
         setListAdapter(adapter);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 }
