@@ -6,7 +6,10 @@ import android.view.View;
 import android.widget.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import android.content.Intent;
+import org.jsoup.nodes.Document;
 
 /**
  * Created by robinvermes on 25/04/2015.
@@ -16,6 +19,8 @@ public class RechercheRecette extends Activity{
     private ArrayList<String> mAlimentList = new ArrayList<String>();
     private ArrayAdapter<String> mAlimentListAdapter;
     private ListView mAlimentListView;
+
+    private ArrayList<HashMap<String, String>> recetteList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,9 +48,18 @@ public class RechercheRecette extends Activity{
 
     }
 
-    public void putURL(String url){
+    public void finalizeResearch(Document document){
+
+        // recuperer les bonne infos
+
+
+
+        //actualiser la liste
         mAlimentList.clear();
-        mAlimentList.add(url);
+
+
+
+
         mAlimentListAdapter.notifyDataSetChanged();
     }
 }

@@ -20,7 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  * Created by annesohier on 25/04/2015.
@@ -29,13 +34,12 @@ import java.util.ArrayList;
 public class AsyncRechercheRecettes extends AsyncTask<Void, Integer, Boolean> {
 
     private WeakReference<RechercheRecette> mActivity = null;
-    private static final int timeoutConnection = 3000;
-    private static final int timeoutSocket = 5000;
     private static final String url1 = "http://www.marmiton.org/recettes/recherche.aspx?aqt=";
     private static final String url2 = "";
 
     private String mUrlString;
-    private StringBuilder sb;
+
+    private Document document;
 
     private ArrayList<String> mAlimentList = new ArrayList<String>();
 
@@ -43,7 +47,6 @@ public class AsyncRechercheRecettes extends AsyncTask<Void, Integer, Boolean> {
         super();
         this.mActivity = new WeakReference<RechercheRecette>((RechercheRecette) rechercheActivity);
         this.mAlimentList = alimentList;
-        this.sb = new StringBuilder();
         mUrlString = url1 + createURL() + url2;
     }
 
@@ -61,46 +64,24 @@ public class AsyncRechercheRecettes extends AsyncTask<Void, Integer, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
-        mActivity.get().putURL(sb.toString());
 
+        mActivity.get().finalizeResearch(document);
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
         InputStream input;
 
+        URL urlToCheck = null;
+
         try {
-            input = getInputStreamFromUrl(mUrlString);
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"), 8);
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            input.close();
+            urlToCheck = new URL(mUrlString);
+            document = Jsoup.parse(urlToCheck, 5000);
         } catch (IOException e) {
-            Log.e("couldnt create IStream", "Error getting stream " + e.toString());
-        } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
+            e.printStackTrace();
+            Log.e("Coulndt get infofromURL", "Couldn't Parse HTML " + e.toString());
         }
-
-
         return null;
     }
 
-    public static InputStream getInputStreamFromUrl(String url) throws IOException
-    {
-        HttpParams httpParameters = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-
-        DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpPost httpPost = new HttpPost(url);
-
-        HttpResponse httpResponse = httpClient.execute(httpPost);
-        HttpEntity httpEntity = httpResponse.getEntity();
-
-        return httpEntity.getContent();
-    }
 }
