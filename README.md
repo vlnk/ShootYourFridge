@@ -19,7 +19,7 @@ The wonderfull project leaded by Michèle, Robin, Hélias and Valentin is very v
 
 ## Ce qu'il faut absolument FAIRE
 
-* Tout le monde peut coder android sereinement (Michèle OK, Robin OKICH, Hélias OKICH, Valentin SAC A MERDE)
+* Tout le monde peut coder android sereinement (Michèle OK, Robin OK, Hélias OKICH, Valentin OK)
 * C'est finir l'application à temps
 
 ## Points sensibles
