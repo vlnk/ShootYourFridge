@@ -34,12 +34,15 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
      */
     private Button scanBtn;
     private Button addBtn;
-    private TextView formatTxt, contentTxt;
+    private TextView formatTxt, contentTxt, resultsTxt;
     private EditText addAlimentText;
 
     private ListView mainListView;
+    private ListView resultListView;
     private ArrayAdapter<String> mArrayAdapter;
+    private ArrayAdapter<String> mArrayAdapterResult;
     private ArrayList<String> mNameList = new ArrayList<String>();
+    private ArrayList<String> mResultList = new ArrayList<String>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,21 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
 
         scanBtn.setOnClickListener(this);
 
+        //text result
+        resultsTxt = (TextView)findViewById(R.id.resultTextView);
+
+        //list result
+        resultListView = (ListView) findViewById(R.id.list_proposal);
+        mArrayAdapterResult = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                mResultList);
+        resultListView.setAdapter(mArrayAdapterResult);
+        resultListView.setOnItemClickListener(new ListView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                pushAddButton(mResultList.get(position));
+            }
+        });
+
         //Add Button
         addBtn = (Button) findViewById(R.id.add_button);
         addBtn.setOnClickListener(this);
@@ -61,14 +79,21 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         //Add aliment text
         addAlimentText = (EditText) findViewById(R.id.add_aliment_text);
         addAlimentText.setOnClickListener(this);
-        //Aliment List
 
+        //Aliment List
         mainListView = (ListView) findViewById(R.id.aliments_list);
         mArrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
                 mNameList);
         mainListView.setAdapter(mArrayAdapter);
-        mainListView.setOnItemClickListener(this);
+        mainListView.setOnItemClickListener(new ListView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+                mNameList.remove(position);
+                mArrayAdapter.notifyDataSetChanged();
+            }
+        });
+        mResultList.add("Coucou");
+        mArrayAdapterResult.notifyDataSetChanged();
 
     }
 
@@ -80,8 +105,8 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         }
         if(v.getId()==R.id.scan_button){
             //scan
-       //     IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-       //     scanIntegrator.initiateScan();
+            //     IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            //     scanIntegrator.initiateScan();
 
             //lancer le thread
             AsyncTaskClass mTask = new AsyncTaskClass(this, "3029330003533");
@@ -100,7 +125,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         } catch (Exception e) {
             e.printStackTrace();
         }
-    */
+   */
     }
 
 
@@ -127,7 +152,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
             String scanFormat = scanningResult.getFormatName();
             formatTxt.setText("FORMAT: " + scanFormat);
             contentTxt.setText("CONTENT: " + scanContent);
-           //addAlimentText.setText(scanContent);
+            //addAlimentText.setText(scanContent);
         }
         else{
             Toast toast = Toast.makeText(getApplicationContext(),

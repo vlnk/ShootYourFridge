@@ -4,10 +4,9 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
         <Button android:id="@+id/scan_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -27,14 +26,29 @@
                 android:textIsSelectable="true"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/scan_format" />
+        <TextView
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_marginTop="60dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="Scan results Click to add"
+                android:id="@+id/resultTextView" android:textAlignment="center"/>
+        <ListView
+                android:id="@+id/list_proposal"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginLeft="130dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="60dp"/>
         <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="100dp"
+                android:layout_marginTop="170dp"
+                android:layout_marginLeft="30dp"
                 android:orientation="horizontal">
             <EditText
                     android:id="@+id/add_aliment_text"
-                    android:layout_width="280dp"
+                    android:layout_width="260dp"
                     android:layout_height="wrap_content"
                     android:hint="@string/add_aliment" />
             <Button
@@ -46,9 +60,10 @@
         <ListView
                 android:id="@+id/aliments_list"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_weight="1"
-                android:layout_marginTop="150dp"/>
+                android:layout_height="230dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="220dp"/>
         <Button
                 android:id="@+id/validate_button"
                 android:layout_width="wrap_content"
