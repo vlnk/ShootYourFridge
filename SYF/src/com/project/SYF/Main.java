@@ -1,5 +1,6 @@
 package com.project.SYF;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -27,14 +28,13 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 
 
-
 public class Main extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener{
     /**
      * Called when the activity is first created.
      */
     private Button scanBtn;
     private Button addBtn;
-    private Button validBtn;
+
     private TextView formatTxt, contentTxt, resultsTxt;
     private EditText addAlimentText;
 
@@ -53,12 +53,32 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
 
         setContentView(R.layout.main);
 
-        //Scan button
+        //Scan Button
         scanBtn = (Button)findViewById(R.id.scan_button);
+        scanBtn.setOnClickListener(
+                new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        scan();
+                    }
+                }
+        );
+
+        //Add Button
+        addBtn = (Button) findViewById(R.id.add_button);
+        addBtn.setOnClickListener(
+                new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View v) {
+                        pushAddButton(addAlimentText.getText().toString(), false);
+                    }
+                }
+        );
+
         formatTxt = (TextView)findViewById(R.id.scan_format);
         contentTxt = (TextView)findViewById(R.id.scan_content);
-
-        scanBtn.setOnClickListener(this);
 
         //text result
         resultsTxt = (TextView)findViewById(R.id.resultTextView);
@@ -69,18 +89,14 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 android.R.layout.simple_list_item_1,
                 mResultList);
         resultListView.setAdapter(mArrayAdapterResult);
-        resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pushAddButton(mResultList.get(position), true);
-            }
-        });
+        resultListView.setOnItemClickListener(
+                new ListView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        pushAddButton(mResultList.get(position), true);
+                    }
+                });
 
-
-        //Add Button
-        addBtn = (Button) findViewById(R.id.add_button);
-        addBtn.setOnClickListener(this);
-
-        //Add aliment text
+        //Add Aliment Text
         addAlimentText = (EditText) findViewById(R.id.add_aliment_text);
         addAlimentText.setOnClickListener(this);
 
@@ -90,16 +106,13 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 android.R.layout.simple_list_item_1,
                 mNameList);
         mainListView.setAdapter(mArrayAdapter);
+
         mainListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mNameList.remove(position);
                 mArrayAdapter.notifyDataSetChanged();
             }
         });
-
-        //Validate Button
-        validBtn = (Button) findViewById(R.id.validate_button);
-        validBtn.setOnClickListener(this);
     }
 
 
@@ -108,34 +121,10 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         if(v.getId()==R.id.add_aliment_text) {
             addAlimentText.setText(addAlimentText.getText().toString());
         }
-        if(v.getId()==R.id.scan_button){
-            //scan + lancement recherche du produit (dans OnActivityResult)
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
-
-
-        }
-        if(v.getId()==R.id.add_button){
-            pushAddButton(addAlimentText.getText().toString(), false);
-        }
-        if(v.getId()==R.id.validate_button){
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "Changement d'activité?", Toast.LENGTH_SHORT);
-            toast.show();
+        else if(v.getId()==R.id.validate_button){
             Intent validateIntent = new Intent(this, RechercheRecette.class);
             validateIntent.putExtra("ingredients", mNameList);
-            startActivity(validateIntent);
         }
-
-  /*      try {
-            URL url = new URL("http://www.vogella.com");
-            HttpURLConnection con = (HttpURLConnection) url
-                    .openConnection();
-            readStream(con.getInputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-   */
     }
 
 
@@ -196,6 +185,11 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         //Log.d("omg android", position + ": " + mNameList.get(position));
     }
 
+
+    private void scan() {
+        IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+        scanIntegrator.initiateScan();
+    }
 /*
     private void readStream(InputStream in) {
         BufferedReader reader = null;
