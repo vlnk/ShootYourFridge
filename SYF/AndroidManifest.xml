@@ -18,5 +18,9 @@
                   android:label="@string/app_name"
                   android:parentActivityName="Main">
         </activity>
+        <activity android:name="AffichageRecette"
+                  android:label="@string/app_name"
+                  android:parentActivityName="RechercheRecette">
+        </activity>
     </application>
 </manifest>
