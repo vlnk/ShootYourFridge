@@ -72,6 +72,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
             }
         });
 
+        
         //Add Button
         addBtn = (Button) findViewById(R.id.add_button);
         addBtn.setOnClickListener(this);
