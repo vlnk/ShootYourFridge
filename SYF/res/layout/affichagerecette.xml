@@ -40,5 +40,10 @@
             android:layout_height="wrap_content"
             android:paddingBottom="2dip"
             android:textColor="#acacac" />
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ajouter aux Favoris"
+            android:id="@+id/addtofavoris_button" android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

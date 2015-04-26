@@ -11,10 +11,8 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.*;
-import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Food;
-import com.project.SYF.model.Catalog;
 import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
 import android.content.Intent;
@@ -63,6 +61,30 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
 
         // init mNameList
         mNameList = getResults();
+
+
+        // Display dataBas in LogCat
+        Log.d("Reading: ", "Reading all aliments from food..");
+        List<Food> food = db.getAllInFood();
+
+        for (Food cn : food) {
+            String log = "Id: " + cn.getId() + " ,Name: " + cn.getName() + " ," +
+                    "Scan Id: " + cn.getScanId();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
+        }
+
+        Log.d("Reading: ", "Reading all aliments from Catalog..");
+        List<Catalog> cat = db.getAllInCatalog();
+
+        for (Catalog cn : cat) {
+            String log = "Id: " + cn.getId() + " ,Name: " + cn.getName() + " ," +
+                    "Scan Id: " + cn.getScanId();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
+        }
+
+
 
         //Scan button
         scanBtn = (Button)findViewById(R.id.scan_button);
@@ -125,19 +147,12 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 */
                 return true;
             }
-
-
         });
-
 
         //Validate Button
         validBtn = (Button) findViewById(R.id.validate_button);
         validBtn.setOnClickListener(this);
     }
-
-
-
-
 
 
 
@@ -199,7 +214,11 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 Food newAliment = new Food(toListText, mCurrentBarCode);
                 db.addFood(newAliment);
 
-                mCurrentBarCode= null;
+
+                Catalog newCatalog = new Catalog(toListText,
+                        mCurrentBarCode);
+                db.addCatalog(newCatalog);
+
             }
             addAlimentText.setText("");
         }
@@ -220,7 +239,12 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         //retrieve scan result
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
-
+            //we have a result
+       /*     String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            formatTxt.setText("FORMAT: " + scanFormat);
+            contentTxt.setText("CONTENT: " + scanContent);
+         */
             mCurrentBarCode = scanningResult.getContents();
 
             DatabaseHelper db = new DatabaseHelper(this);
@@ -256,7 +280,6 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     {
         mCurrentBarCode = null;
     }
-
 
     /*
      * Populate mNameList with the elements in the dataBase

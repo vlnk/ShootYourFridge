@@ -18,6 +18,10 @@
                   android:label="@string/app_name"
                   android:parentActivityName="Home">
         </activity>
+        <activity android:name="Favoris"
+                  android:label="@string/app_name"
+                  android:parentActivityName="Home">
+        </activity>
         <activity android:name="RechercheRecette"
                   android:label="@string/app_name"
                   android:parentActivityName="Main">

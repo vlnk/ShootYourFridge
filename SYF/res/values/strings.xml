@@ -8,7 +8,7 @@
 
     <string name="scanlauncher_button">Scanner</string>
     <string name="favoris_button">Favoris</string>
-
+    <string name="addtofavoris_button">Ajouter aux Favoris</string>
 
     <string name="no_info_validate">Yes</string>
     <string name="no_info_cancel">No</string>
