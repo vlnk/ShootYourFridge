@@ -2,40 +2,48 @@ package com.project.SYF;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
-import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.dialogs.NoEntryFoundAlertDialog;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
 
     private WeakReference<Main> mActivity = null;
+
+    @SuppressWarnings("unused")
     private static final int timeoutConnection = 3000;
+
+    @SuppressWarnings("unused")
     private static final int timeoutSocket = 5000;
+
+    @SuppressWarnings("unused")
     private static final String url1 = "http://world.openfoodfacts" +
             ".org/api/v0/produit/";
+
+    @SuppressWarnings("unused")
     private static final String url2 = ".json";
 
     private static final String htmlurl1 = "http://www.upcdatabase.com/item/";
     private static final String htmlurl2 = "";
+
+    @SuppressWarnings("CanBeFinal")
     private String mUrlString;
+
+    @SuppressWarnings("unused")
     private StringBuilder sb;
+
+    @SuppressWarnings("unused")
     private static final String TAG_PRODUCT = "product";
+
+    @SuppressWarnings("unused")
     private static final String TAG_KEYWORDS = "_keywords";
 
     private final ArrayList<String> keywordsList = new ArrayList<>();
