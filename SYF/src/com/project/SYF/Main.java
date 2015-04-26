@@ -20,9 +20,6 @@ import java.util.List;
 public class Main extends Activity {
     private EditText addAlimentText;
     private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
-
-    private ArrayList<String> mNameList = new ArrayList<String>();
-    private ArrayList<String> mResultList = new ArrayList<String>();
     private ArrayList<String> mNameList = new ArrayList<>();
 
     @SuppressWarnings("CanBeFinal")
