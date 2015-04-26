@@ -1,5 +1,6 @@
 package com.project.SYF;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -31,27 +32,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Main extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener{
+public class Main extends Activity {
     /**
      * Called when the activity is first created.
      */
-    private Button scanBtn;
-    private Button addBtn;
-    private Button validBtn;
+    private Button scanBtn, addBtn, validBtn;
     private TextView formatTxt, contentTxt, resultsTxt;
     private EditText addAlimentText;
+    private ListView mainListView, resultListView;
+    private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
 
-    private ListView mainListView;
-    private ListView resultListView;
-    private ArrayAdapter<String> mArrayAdapter;
-    private ArrayAdapter<String> mArrayAdapterResult;
-    private ArrayList<String> mNameList = new ArrayList<String>();
-    private ArrayList<String> mResultList = new ArrayList<String>();
+    private ArrayList<String> mNameList = new ArrayList<>();
+    private ArrayList<String> mResultList = new ArrayList<>();
 
     private int positionToDelete;
 
     private String mCurrentBarCode;
-
 
     // Database Helper
     DatabaseHelper db;
@@ -59,52 +55,30 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.main);
+
+        //INITIALIZE DB (mNameList)
         db = new DatabaseHelper(getApplicationContext());
-
-        // init mNameList
         mNameList = getResults();
-
-
-        // Display dataBas in LogCat
-        Log.d("Reading: ", "Reading all aliments from food..");
-        List<Food> food = db.getAllInFood();
-
-        for (Food cn : food) {
-            String log = "Id: " + cn.getId() + " ,Name: " + cn.getName() + " ," +
-                    "Scan Id: " + cn.getScanId();
-            // Writing Contacts to log
-            Log.d("Name: ", log);
-        }
-
-        Log.d("Reading: ", "Reading all aliments from Catalog..");
-        List<Catalog> cat = db.getAllInCatalog();
-
-        for (Catalog cn : cat) {
-            String log = "Id: " + cn.getId() + " ,Name: " + cn.getName() + " ," +
-                    "Scan Id: " + cn.getScanId();
-            // Writing Contacts to log
-            Log.d("Name: ", log);
-        }
-
-
+        initializeDb();
 
         //Scan button
         scanBtn = (Button)findViewById(R.id.scan_button);
         formatTxt = (TextView)findViewById(R.id.scan_format);
         contentTxt = (TextView)findViewById(R.id.scan_content);
-
-        scanBtn.setOnClickListener(this);
+        scanBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        scan();
+                    }
+                });
 
         //text result
         resultsTxt = (TextView)findViewById(R.id.resultTextView);
 
-        //list result
+        //LIST RESULT
         resultListView = (ListView) findViewById(R.id.list_proposal);
-        mArrayAdapterResult = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                mResultList);
+        mArrayAdapterResult = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mResultList);
         resultListView.setAdapter(mArrayAdapterResult);
         resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -112,16 +86,25 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
             }
         });
 
-
-        //Add Button
+        //ADD BUTTON
         addBtn = (Button) findViewById(R.id.add_button);
-        addBtn.setOnClickListener(this);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        pushAddButton(addAlimentText.getText().toString(), false);
+                    }
+                });
 
-        //Add aliment text
+        //ADD ALIMENT BY TEXT
         addAlimentText = (EditText) findViewById(R.id.add_aliment_text);
-        addAlimentText.setOnClickListener(this);
+        addAlimentText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addAlimentText.setText(addAlimentText.getText().toString());
+                    }
+                });
 
-        //Aliment List
+        //ALIMENT LIST
         mainListView = (ListView) findViewById(R.id.aliments_list);
         mArrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1,
@@ -156,7 +139,12 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
 
         //Validate Button
         validBtn = (Button) findViewById(R.id.validate_button);
-        validBtn.setOnClickListener(this);
+        validBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        validate();
+                    }
+                });
     }
 
     public void deleteElementCurrentList(){
@@ -171,41 +159,17 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         String name = mNameList.get(positionToDelete);
         db.deleteCatalog(name);
     }
-
-
-
-    public void onClick(View v){
-        //respond to clicks
-        if(v.getId()==R.id.add_aliment_text) {
-            addAlimentText.setText(addAlimentText.getText().toString());
-        }
-        if(v.getId()==R.id.scan_button){
-            //scan + lancement recherche du produit (dans OnActivityResult)
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
-
-        }
-        if(v.getId()==R.id.add_button){
-            pushAddButton(addAlimentText.getText().toString(), false);
-        }
-        if(v.getId()==R.id.validate_button){
-
-            Intent validateIntent = new Intent(this, RechercheRecette.class);
-            validateIntent.putExtra("ingredients", mNameList);
-            startActivity(validateIntent);
-        }
-
-  /*      try {
-            URL url = new URL("http://www.vogella.com");
-            HttpURLConnection con = (HttpURLConnection) url
-                    .openConnection();
-            readStream(con.getInputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-   */
+    private void scan() {
+        //scan + lancement recherche du produit (dans OnActivityResult)
+        IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+        scanIntegrator.initiateScan();
     }
 
+    private void validate() {
+        Intent validateIntent = new Intent(this, RechercheRecette.class);
+        validateIntent.putExtra("ingredients", mNameList);
+        startActivity(validateIntent);
+    }
 
     /**
      * Add aliment to the current list, and to the database
@@ -277,17 +241,6 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 mTask.execute();
             }
         }
-
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        // Log the item's position and contents
-        // to the console in Debug
-        mNameList.remove(position);
-        mArrayAdapter.notifyDataSetChanged();
-        //Log.d("omg android", position + ": " + mNameList.get(position));
     }
 
     /*
@@ -299,7 +252,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     }
 
     /*
-     * Populate mNameList with the elements in the dataBase
+     *  Populate mNameList with the elements in the FOOD_TABLE
      */
     private ArrayList<String> getResults() {
         ArrayList<String> resultList = new ArrayList<String>();
@@ -314,29 +267,26 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         return resultList;
     }
 
-/*
-    private void readStream(InputStream in) {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(in));
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                addAlimentText.setText(line);
-                mNameList.add(addAlimentText.getText().toString());
-                mArrayAdapter.notifyDataSetChanged();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+    private void initializeDb() {
+        // Display dataBas in LogCat
+        Log.d("Reading: ", "Reading all aliments from food..");
+        List<Food> food = db.getAllInFood();
+
+        for (Food cn : food) {
+            String log = "Id: " + cn.getId() + " ,Name: " + cn.getName() + " ," +
+                    "Scan Id: " + cn.getScanId();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
+        }
+
+        Log.d("Reading: ", "Reading all aliments from Catalog..");
+        List<Catalog> cat = db.getAllInCatalog();
+
+        for (Catalog cn : cat) {
+            String log = "Id: " + cn.getId() + " ,Name: " + cn.getName() + " ," +
+                    "Scan Id: " + cn.getScanId();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
         }
     }
-*/
-
 }
