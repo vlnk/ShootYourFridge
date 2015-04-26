@@ -1,26 +1,21 @@
 package com.project.SYF.model;
 
 /**
- * Created by mimmy on 23/04/15.
+ * Created by mimmy on 26/04/15.
  */
-public class Food {
+public class Catalog {
     int     id;
-    String     scanID;
+    String  scanID;
     String  name;
 
     // constructors
-    public Food() {
+    public Catalog() {
     }
 
-    public Food(String name) {
-        this.name = name;
-    }
-
-    public Food(String name, String scanID) {
+    public Catalog(String name, String scanID) {
         this.name = name;
         this.scanID = scanID;
     }
-
 
     // setters
     public void setId(int id) {
@@ -46,5 +41,4 @@ public class Food {
     public String getName() {
         return this.name;
     }
-
 }
