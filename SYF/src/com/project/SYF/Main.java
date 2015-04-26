@@ -115,6 +115,16 @@ public class Main extends Activity {
 
         //VALIDATE BUTTON
         Button validBtn = (Button) findViewById(R.id.validate_button);
+        // modify element when simple click on it
+        mainListView.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = mNameList.get(position);
+
+            }
+        });
+
+        //Validate Button
+        validBtn = (Button) findViewById(R.id.validate_button);
         validBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
