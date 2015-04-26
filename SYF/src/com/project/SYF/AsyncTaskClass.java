@@ -51,8 +51,8 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
             ".org/api/v0/produit/";
     private static final String url2 = ".json";
 
-    private static final String htmlurl1 = "http://www.digit-eyes.com/cgi-bin/digiteyes.fcgi?action=upcList&upcCode=";
-    private static final String htmlurl2 = "#.VT0LY2S8PGd";
+    private static final String htmlurl1 = "http://www.upcdatabase.com/item/";
+    private static final String htmlurl2 = "";
     private String mUrlString;
     private StringBuilder sb;
     private static final String TAG_PRODUCT = "product";
@@ -72,20 +72,6 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        super.onPostExecute(aBoolean);
-        finalizeGetKeywordsList();
-
-        if (mNoValueFromProduct){
-            // alert dialog to inform no info were found
-            new NoEntryFoundAlertDialog().show(mActivity.get().getFragmentManager(), "tag");
-        }
-        else{
-            mActivity.get().replaceAllInKeyWordsList(keywordsList);
-        }
-    }
-
-    @Override
     protected Boolean doInBackground(Void... params) {
         URL urlToCheck = null;
 
@@ -100,16 +86,51 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        super.onPostExecute(aBoolean);
+        finalizeGetKeywordsList();
 
-    private void finalizeGetKeywordsList()
-    {
+        if (mNoValueFromProduct){
+            // alert dialog to inform no info were found
+            new NoEntryFoundAlertDialog().show(mActivity.get().getFragmentManager(), "tag");
+        }
+        else{
+            mActivity.get().replaceAllInKeyWordsList(keywordsList);
+        }
+    }
+
+
+    private void finalizeGetKeywordsList() {
         String name;
         String content;
         String[] res;
+        int idx1;
+        int idx2;
         mNoValueFromProduct = true;
 
-        Elements aliments = document.getElementsByTag("meta");
+        Log.i("  doc :   ", document.toString());
+        Element title = document.getElementsByTag("title").first();
+        name = title.text();
+        idx1 = name.indexOf(": ") + 2;
+        name = name.substring(idx1);
 
+        if (name.compareTo("Item Not Found") == 0) {
+            mNoValueFromProduct = true;
+        } else {
+            mNoValueFromProduct = false;
+
+            Element aliments = document.getElementsByClass("data").first();
+            content = aliments.text();
+            idx1 = content.indexOf("Description ") + 12;
+            idx2 = content.indexOf("Size/Weight");
+            content = content.substring(idx1, idx2);
+            res = content.split(" ");
+            for (int i = 0; i < res.length; i++) {
+                keywordsList.add(i, res[i]);
+            }
+        }
+/*
         for(Element alim : aliments) {
             name = alim.attr("name");
             if (name.compareTo("keywords") == 0)
@@ -122,7 +143,7 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
                 }
             }
         }
+*/
     }
-
 
 }

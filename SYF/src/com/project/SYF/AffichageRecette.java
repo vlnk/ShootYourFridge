@@ -5,21 +5,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import android.widget.Toast;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 /**
  * Created by robinvermes on 25/04/2015.
  */
-public class AffichageRecette extends Activity {
+public class AffichageRecette extends Activity implements View.OnClickListener{
 
     private static String mHref;
     private static TextView mTempsPrepa;
@@ -27,6 +24,8 @@ public class AffichageRecette extends Activity {
     private static TextView mIngredients;
     private static TextView mTitrePreparation;
     private static TextView mPreparation;
+
+    private Button mAddToFavorisBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +41,10 @@ public class AffichageRecette extends Activity {
         mIngredients = (TextView)findViewById(R.id.ingredients);
         mTitrePreparation = (TextView)findViewById(R.id.titre_preparation);
         mPreparation =  (TextView)findViewById(R.id.preparation);
+
+        mAddToFavorisBtn = (Button)findViewById(R.id.addtofavoris_button);
+
+        mAddToFavorisBtn.setOnClickListener(this);
 
         AsyncGetRecette mTask = new AsyncGetRecette(this, mHref);
         mTask.execute();
@@ -76,5 +79,10 @@ public class AffichageRecette extends Activity {
         mIngredients.setText(ingredients);
         mTitrePreparation.setText(titrePreparation);
         mPreparation.setText(contenuPreparation);
+    }
+
+    @Override
+    public void onClick(View v) {
+        //ajouter la recette aux favoris
     }
 }
