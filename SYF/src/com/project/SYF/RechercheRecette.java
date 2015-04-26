@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 import android.content.Intent;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * Created by robinvermes on 25/04/2015.
@@ -50,9 +52,24 @@ public class RechercheRecette extends Activity{
 
     public void finalizeResearch(Document document){
 
-        // recuperer les bonne infos
+        Elements recettes = document.getElementsByClass("m_contenu_resultat");
 
+        for(Element recette : recettes) {
+            Element titreDiv = recette.getElementsByClass("m_titre_resultat").first();
 
+            Elements titreA = null;
+            if((titreA = titreDiv.getElementsByAttribute("a")) == null)
+                continue;
+            Element lienTitre = titreA.first();
+            String titreHref  = lienTitre.attr("href");
+            String titre = lienTitre.attr("title");
+
+            Element detailDiv = recette.getElementsByClass("m_detail_recette").first();
+            String detail = detailDiv.text();
+
+            Element descriptionDiv = recette.getElementsByClass("m_texte_resultat").first();
+            String description = descriptionDiv.text();
+        }
 
         //actualiser la liste
         mAlimentList.clear();
