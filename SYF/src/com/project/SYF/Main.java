@@ -103,15 +103,19 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         if(v.getId()==R.id.add_aliment_text) {
             addAlimentText.setText(addAlimentText.getText().toString());
         }
-        if(v.getId()==R.id.scan_button){
+        else if(v.getId()==R.id.scan_button){
             //scan + lancement recherche du produit (dans OnActivityResult)
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
 
 
         }
-        if(v.getId()==R.id.add_button){
+        else if(v.getId()==R.id.add_button){
             pushAddButton(addAlimentText.getText().toString(), false);
+        }
+        else if(v.getId()==R.id.validate_button){
+            Intent validateIntent = new Intent(this, RechercheRecette.class);
+            validateIntent.putExtra("ingredients", mNameList);
         }
 
   /*      try {

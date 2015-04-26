@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.*;
 
 import java.util.ArrayList;
+import android.content.Intent;
 
 /**
  * Created by robinvermes on 25/04/2015.
@@ -21,6 +22,9 @@ public class RechercheRecette extends Activity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
+
+        Intent intent = getIntent();
+        mAlimentList = intent.getStringArrayListExtra("ingredients");
 
         //list Aliment
         mAlimentListView = (ListView) findViewById(R.id.list_lien_recette);
