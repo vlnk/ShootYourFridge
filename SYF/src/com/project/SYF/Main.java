@@ -1,23 +1,24 @@
 package com.project.SYF;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.widget.*;
+import com.project.SYF.helper.DatabaseHelper;
+import com.project.SYF.model.Food;
 import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
 import android.content.Intent;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
-import android.widget.EditText;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -25,7 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 public class Main extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener{
@@ -47,11 +48,19 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
 
     private String mCurrentBarCode;
 
+
+    // Database Helper
+    DatabaseHelper db;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
+        db = new DatabaseHelper(getApplicationContext());
+
+        // init mNameList
+        mNameList = getResults();
 
         //Scan button
         scanBtn = (Button)findViewById(R.id.scan_button);
@@ -90,8 +99,14 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 android.R.layout.simple_list_item_1,
                 mNameList);
         mainListView.setAdapter(mArrayAdapter);
+        // suppress element when click on it
+        //
+        // change to double click ?????
         mainListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String name = mNameList.get(position);
+                db.deleteAliment(name);
+
                 mNameList.remove(position);
                 mArrayAdapter.notifyDataSetChanged();
             }
@@ -101,6 +116,8 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         validBtn = (Button) findViewById(R.id.validate_button);
         validBtn.setOnClickListener(this);
     }
+
+
 
 
     public void onClick(View v){
@@ -137,23 +154,35 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     }
 
 
+    /**
+     * Add aliment to the current list, and to the database
+     *      when button "Add" is pressed
+     * */
     public void pushAddButton(String toListText, boolean withBarCode){
-        boolean estdeja = false;
-        if (withBarCode) {
-            //ajouter a la base de donner avec le code barre???
+        // if string not empty
+        if ("".compareTo(toListText) != 0){
+            boolean estdeja = false;
 
-        }
-        for (int i = 0; i < mNameList.size(); i++)
-        {
-            if (mNameList.get(i).compareTo(toListText) == 0)
-                estdeja = true;
+            // search for this value in the actual list of aliments
+            for (int i = 0; i < mNameList.size(); i++)
+            {
+                if (mNameList.get(i).compareTo(toListText) == 0)
+                    estdeja = true;
+            }
+
+            // add a new element to the list and the database
+            if (!estdeja) {
+                mNameList.add(toListText);
+                mArrayAdapter.notifyDataSetChanged();
+
+                Food newAliment = new Food(toListText, mCurrentBarCode);
+                db.addFood(newAliment);
+
+                mCurrentBarCode= null;
+            }
+            addAlimentText.setText("");
         }
 
-        if (!estdeja) {
-            mNameList.add(toListText);
-            mArrayAdapter.notifyDataSetChanged();
-        }
-        addAlimentText.setText("");
     }
 
     public void replaceAllInKeyWordsList(ArrayList<String> keywordsList){
@@ -163,6 +192,10 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+
+        // initialize variable
+        mCurrentBarCode = null;
+
         //retrieve scan result
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
@@ -176,12 +209,9 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
 
             AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
             mTask.execute();
+
         }
-        else{
-            Toast toast = Toast.makeText(getApplicationContext(),
-                    "No scan data received!", Toast.LENGTH_SHORT);
-            toast.show();
-        }
+
     }
 
     @Override
@@ -192,6 +222,30 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         mNameList.remove(position);
         mArrayAdapter.notifyDataSetChanged();
         //Log.d("omg android", position + ": " + mNameList.get(position));
+    }
+
+    /*
+     * Called by asyncTask to reinitialize the current barcode
+     */
+    public void changeBarCode()
+    {
+        mCurrentBarCode = null;
+    }
+
+    /*
+     * Populate mNameList with the elements in the dataBase
+     */
+    private ArrayList<String> getResults() {
+        ArrayList<String> resultList = new ArrayList<String>();
+        DatabaseHelper db = new DatabaseHelper(this); //my database helper file
+
+        List<Food> foodList = db.getAllInFood();
+
+        for (int i = 0; i < foodList.size(); i++) {
+            resultList.add(i, foodList.get(i).getName());
+        }
+
+        return resultList;
     }
 
 /*

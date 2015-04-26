@@ -2,6 +2,8 @@ package com.project.SYF;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -37,7 +39,8 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     private WeakReference<Main> mActivity = null;
     private static final int timeoutConnection = 3000;
     private static final int timeoutSocket = 5000;
-    private static final String url1 = "http://en.openfoodfacts.org/api/v0/produit/";
+    private static final String url1 = "http://world.openfoodfacts" +
+            ".org/api/v0/produit/";
     private static final String url2 = ".json";
     private String mUrlString;
     private StringBuilder sb;
@@ -59,9 +62,24 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         if (mNoValueFromProduct){
-            Toast toast = Toast.makeText(mActivity.get(),
-                    "No value from product found", Toast.LENGTH_SHORT);
-            toast.show();
+
+            new AlertDialog.Builder(mActivity.get())
+                    .setTitle("No entry were found for this product")
+                    .setMessage("Do you still want to add it manually?")
+                    .setPositiveButton(R.string.no_info_validate, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with adding new aliment
+                        }
+                    })
+                    .setNegativeButton(R.string.no_info_cancel, new
+                            DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // reinitialize BarCode for new entry
+                            mActivity.get().changeBarCode();
+                        }
+                    })
+                    .setIcon(android.R.drawable.star_off)
+                    .show();
         }
         else{
             mActivity.get().replaceAllInKeyWordsList(keywordsList);
