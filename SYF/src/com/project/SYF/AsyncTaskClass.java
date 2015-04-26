@@ -11,37 +11,17 @@ import android.util.Log;
 import android.widget.Toast;
 import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.dialogs.NoEntryFoundAlertDialog;
-import com.project.SYF.helper.DatabaseHelper;
-import com.project.SYF.model.Food;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
-/**
- * Created by robinvermes on 24/04/2015.
- */
 public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
 
     private WeakReference<Main> mActivity = null;
@@ -58,22 +38,34 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     private static final String TAG_PRODUCT = "product";
     private static final String TAG_KEYWORDS = "_keywords";
 
-    private ArrayList<String> keywordsList = new ArrayList<String>();
+    private final ArrayList<String> keywordsList = new ArrayList<>();
     private boolean mNoValueFromProduct;
 
     private Document document;
 
     public AsyncTaskClass(Activity mainActivity, String urlEndString) {
         super();
-        this.mActivity = new WeakReference<Main>((Main) mainActivity);
+        this.mActivity = new WeakReference<>((Main) mainActivity);
         this.mUrlString = urlEndString;
-        this.sb = new StringBuilder();
         mNoValueFromProduct = false;
     }
 
     @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        super.onPostExecute(aBoolean);
+        finalizeGetKeywordsList();
+
+        if (mNoValueFromProduct) {
+            // alert dialog to inform no info were found
+            new NoEntryFoundAlertDialog().show(mActivity.get().getFragmentManager(), "tag");
+        } else {
+            mActivity.get().replaceAllInKeyWordsList(keywordsList);
+        }
+    }
+
+    @Override
     protected Boolean doInBackground(Void... params) {
-        URL urlToCheck = null;
+        URL urlToCheck;
 
         try {
             urlToCheck = new URL(htmlurl1 + mUrlString + htmlurl2);
@@ -85,21 +77,6 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
 
         return null;
     }
-
-    @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        super.onPostExecute(aBoolean);
-        finalizeGetKeywordsList();
-
-        if (mNoValueFromProduct){
-            // alert dialog to inform no info were found
-            new NoEntryFoundAlertDialog().show(mActivity.get().getFragmentManager(), "tag");
-        }
-        else{
-            mActivity.get().replaceAllInKeyWordsList(keywordsList);
-        }
-    }
-
 
     private void finalizeGetKeywordsList() {
         String name;
@@ -130,20 +107,5 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
                 keywordsList.add(i, res[i]);
             }
         }
-/*
-        for(Element alim : aliments) {
-            name = alim.attr("name");
-            if (name.compareTo("keywords") == 0)
-            {
-                content = alim.attr("content");
-                res = content.split(" ");
-                mNoValueFromProduct = false;
-                for (int i = 0; i < res.length; i++){
-                    keywordsList.add(i, res[i]);
-                }
-            }
-        }
-*/
     }
-
 }
