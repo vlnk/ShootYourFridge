@@ -3,19 +3,31 @@ package com.project.SYF;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.DialogFragment;
+import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.widget.*;
 import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
-import com.project.SYF.model.Food;
 import com.project.SYF.model.Catalog;
+import com.project.SYF.model.Food;
 import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
 import android.content.Intent;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.view.View.OnClickListener;
+import org.json.JSONObject;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,28 +134,28 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
             public boolean onItemLongClick(AdapterView<?> parent, View view, int
                     position, long id) {
 
+                // Alert Dialog : Deletion Check
+                DialogFragment dialog = new DeleteCheckAlertDialog();
+                dialog.show(getFragmentManager(), "tag");
 
-                new DeleteCheckAlertDialog().show(getFragmentManager(), "tag");
 
 
+                /*
                 String name = mNameList.get(position);
                 db.deleteAliment(name);
 
                 mNameList.remove(position);
                 mArrayAdapter.notifyDataSetChanged();
+
+                */
                 return true;
             }
-
-
         });
-
 
         //Validate Button
         validBtn = (Button) findViewById(R.id.validate_button);
         validBtn.setOnClickListener(this);
     }
-
-
 
 
 
@@ -213,7 +225,6 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
 
             }
             addAlimentText.setText("");
-            mCurrentBarCode= null;
         }
 
     }
@@ -232,7 +243,12 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         //retrieve scan result
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
-
+            //we have a result
+       /*     String scanContent = scanningResult.getContents();
+            String scanFormat = scanningResult.getFormatName();
+            formatTxt.setText("FORMAT: " + scanFormat);
+            contentTxt.setText("CONTENT: " + scanContent);
+         */
             mCurrentBarCode = scanningResult.getContents();
 
             DatabaseHelper db = new DatabaseHelper(this);
@@ -248,6 +264,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 mTask.execute();
             }
         }
+
     }
 
     @Override
@@ -268,9 +285,8 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         mCurrentBarCode = null;
     }
 
-
     /*
-     *  Populate mNameList with the elements in the FOOD_TABLE
+     * Populate mNameList with the elements in the dataBase
      */
     private ArrayList<String> getResults() {
         ArrayList<String> resultList = new ArrayList<String>();

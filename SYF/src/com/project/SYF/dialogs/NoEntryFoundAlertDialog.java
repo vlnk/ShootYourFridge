@@ -30,6 +30,7 @@ public class NoEntryFoundAlertDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         // reinitialize BarCode for new entry
 
+
                     }
                 });
         // Create the AlertDialog object and return it

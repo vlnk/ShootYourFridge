@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import com.project.SYF.Main;
 import com.project.SYF.R;
 
 /**
@@ -13,6 +14,9 @@ import com.project.SYF.R;
  */
 
 public class DeleteCheckAlertDialog extends DialogFragment {
+
+    Activity main = new Main();
+    public int test = 0;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -25,6 +29,8 @@ public class DeleteCheckAlertDialog extends DialogFragment {
                         () {
                     public void onClick(DialogInterface dialog, int id) {
                         //delete the entry
+                        setTest(1);
+
 
                         // ask for complete deletion
 
@@ -35,9 +41,18 @@ public class DeleteCheckAlertDialog extends DialogFragment {
                         .OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
+                        setTest(0);
                     }
                 });
         // Create the AlertDialog object and return it
         return builder.create();
     }
+
+    public void caca()
+    {
+        //rien du tout
+    }
+    public int getTest(){ return test; }
+    private void setTest(int value) { test = value; }
+
 }
