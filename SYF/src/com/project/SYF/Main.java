@@ -48,6 +48,8 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     private ArrayList<String> mNameList = new ArrayList<String>();
     private ArrayList<String> mResultList = new ArrayList<String>();
 
+    private int positionToDelete;
+
     private String mCurrentBarCode;
 
 
@@ -134,6 +136,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                     position, long id) {
 
                 // Alert Dialog : Deletion Check
+                positionToDelete = position;
                 DialogFragment dialog = new DeleteCheckAlertDialog();
                 dialog.show(getFragmentManager(), "tag");
 
@@ -156,6 +159,18 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         validBtn.setOnClickListener(this);
     }
 
+    public void deleteElementCurrentList(){
+        String name = mNameList.get(positionToDelete);
+        db.deleteAliment(name);
+
+        mNameList.remove(positionToDelete);
+        mArrayAdapter.notifyDataSetChanged();
+    }
+
+    public void deleteElementDataBase() {
+        String name = mNameList.get(positionToDelete);
+        db.deleteCatalog(name);
+    }
 
 
 
