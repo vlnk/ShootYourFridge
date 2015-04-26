@@ -7,26 +7,20 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URL;
-import java.util.ArrayList;
 
-/**
- * Created by annesohier on 26/04/2015.
- */
-public class AsyncGetRecette extends AsyncTask<Void, Integer, Boolean> {
+class AsyncGetRecette extends AsyncTask<Void, Integer, Boolean> {
 
     private WeakReference<AffichageRecette> mActivity = null;
 
-    private String mUrlString;
-    private String mStartingUrl = "http://www.marmiton.org";
+    private final String mUrlString;
 
     private Document document;
 
     public AsyncGetRecette(Activity rechercheActivity, String urlString) {
         super();
-        this.mActivity = new WeakReference<AffichageRecette>((AffichageRecette) rechercheActivity);
+        this.mActivity = new WeakReference<>((AffichageRecette) rechercheActivity);
         mUrlString = urlString;
     }
 
@@ -39,9 +33,10 @@ public class AsyncGetRecette extends AsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        URL urlToCheck = null;
+        URL urlToCheck;
 
         try {
+            String mStartingUrl = "http://www.marmiton.org";
             urlToCheck = new URL(mStartingUrl + mUrlString);
             document = Jsoup.parse(urlToCheck, 5000);
         } catch (IOException e) {
