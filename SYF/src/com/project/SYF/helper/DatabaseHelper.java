@@ -278,15 +278,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Recipe reccipe = new Recipe();
-                reccipe.setId(Integer.parseInt(cursor.getString(0)));
-                reccipe.setName(cursor.getString(1));
-                reccipe.setDescription(cursor.getString(2));
-                reccipe.setDescription(cursor.getString(3));
-                reccipe.setHref(cursor.getString(4));
+                Recipe recipe = new Recipe();
+                recipe.setId(Integer.parseInt(cursor.getString(0)));
+                recipe.setName(cursor.getString(1));
+                recipe.setDescription(cursor.getString(2));
+                recipe.setDescription(cursor.getString(3));
+                recipe.setHref(cursor.getString(4));
 
                 // Adding fridge to list
-                recipeList.add(reccipe);
+                recipeList.add(recipe);
             } while (cursor.moveToNext());
         }
         // return fridge list
