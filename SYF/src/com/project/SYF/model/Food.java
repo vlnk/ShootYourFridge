@@ -9,8 +9,7 @@ public class Food {
     String  name;
 
     // constructors
-    public Food() {
-    }
+    public Food() {}
 
     public Food(String name) {
         this.name = name;

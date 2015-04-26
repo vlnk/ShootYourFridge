@@ -42,8 +42,8 @@ public class Main extends Activity {
     private ListView mainListView, resultListView;
     private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
 
-    private ArrayList<String> mNameList = new ArrayList<>();
-    private ArrayList<String> mResultList = new ArrayList<>();
+    private ArrayList<String> mNameList = new ArrayList<String>();
+    private ArrayList<String> mResultList = new ArrayList<String>();
 
     private int positionToDelete;
 
@@ -98,11 +98,11 @@ public class Main extends Activity {
         //ADD ALIMENT BY TEXT
         addAlimentText = (EditText) findViewById(R.id.add_aliment_text);
         addAlimentText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        addAlimentText.setText(addAlimentText.getText().toString());
-                    }
-                });
+            @Override
+            public void onClick(View v) {
+                addAlimentText.setText(addAlimentText.getText().toString());
+            }
+        });
 
         //ALIMENT LIST
         mainListView = (ListView) findViewById(R.id.aliments_list);
@@ -124,15 +124,6 @@ public class Main extends Activity {
                 dialog.show(getFragmentManager(), "tag");
 
 
-
-                /*
-                String name = mNameList.get(position);
-                db.deleteAliment(name);
-
-                mNameList.remove(position);
-                mArrayAdapter.notifyDataSetChanged();
-
-                */
                 return true;
             }
         });
@@ -159,15 +150,18 @@ public class Main extends Activity {
         String name = mNameList.get(positionToDelete);
         db.deleteCatalog(name);
     }
+
     private void scan() {
         //scan + lancement recherche du produit (dans OnActivityResult)
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.initiateScan();
     }
 
+    /**
+     *  Launch the Recipe Search with the current list of ingredients
+     * */
     private void validate() {
         Intent validateIntent = new Intent(this, RechercheRecette.class);
-        validateIntent.putExtra("ingredients", mNameList);
         startActivity(validateIntent);
     }
 
