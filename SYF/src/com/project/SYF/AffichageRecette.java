@@ -25,6 +25,8 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
     private static TextView mTitrePreparation;
     private static TextView mPreparation;
 
+    private static Recipe mCurrentRecipe;
+
     private Button mAddToFavorisBtn;
 
     @Override
@@ -34,7 +36,9 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         setContentView(R.layout.affichagerecette);
 
         Intent intent = getIntent();
-        mHref = intent.getStringExtra("href");
+        mCurrentRecipe = intent.getStringExtra("current recipe");
+
+        mHref = mCurrentRecipe.getHref();
 
         mTempsPrepa = (TextView)findViewById(R.id.temps_preparation);
         mTempsCuisson = (TextView)findViewById(R.id.temps_cuisson);
@@ -83,6 +87,9 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        //ajouter la recette aux favoris
+        //rechercher dans la BD si la recette y est deja
+
+        //si non, on l'ajoute a la BD
+            //Sans oublier de bine mettre l'ID
     }
 }

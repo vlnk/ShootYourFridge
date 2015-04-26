@@ -53,8 +53,13 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
 
         mRecetteListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Recipe thisRecipe = new Recipe(-1, recetteList.get(position).get(TAG_NAME),
+                        recetteList.get(position).get(TAG_DETAILS),
+                        recetteList.get(position).get(TAG_DESCRIPTION),
+                        recetteList.get(position).get(TAG_HREF));
+
                 Intent validateIntent = new Intent(RechercheRecette.this, AffichageRecette.class);
-                validateIntent.putExtra("href", recetteList.get(position).get(TAG_HREF));
+                validateIntent.putExtra("current recipe", thisRecipe);
                 startActivity(validateIntent);
             }
         });
