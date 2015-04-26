@@ -9,6 +9,10 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+import com.project.SYF.dialogs.DeleteCheckAlertDialog;
+import com.project.SYF.dialogs.NoEntryFoundAlertDialog;
+import com.project.SYF.helper.DatabaseHelper;
+import com.project.SYF.model.Food;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -68,38 +72,7 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        super.onPostExecute(aBoolean);
-        finalizeGetKeywordsList();
-        if (mNoValueFromProduct){
-
-            new AlertDialog.Builder(mActivity.get())
-                    .setTitle("No entry were found for this product")
-                    .setMessage("Do you still want to add it manually?")
-                    .setPositiveButton(R.string.no_info_validate, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // continue with adding new aliment
-                        }
-                    })
-                    .setNegativeButton(R.string.no_info_cancel, new
-                            DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // reinitialize BarCode for new entry
-                            mActivity.get().changeBarCode();
-                        }
-                    })
-                    .setIcon(android.R.drawable.star_off)
-                    .show();
-        }
-        else{
-            mActivity.get().replaceAllInKeyWordsList(keywordsList);
-        }
-    }
-
-    @Override
     protected Boolean doInBackground(Void... params) {
-
-
         URL urlToCheck = null;
 
         try {
@@ -110,67 +83,31 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
             Log.e("Coulndt get infofromURL", "Couldn't Parse HTML " + e.toString());
         }
 
-
-
-     /* String urlS = url1 + mUrlString + url2;
-        String jsonStr;
-        InputStream input;
-        JSONObject jSonProduct;
-        JSONArray jSonKeywords;
-
-        try {
-            input = getInputStreamFromUrl(urlS);
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input, "UTF-8"), 8);
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            input.close();
-        } catch (IOException e) {
-            Log.e("couldnt create IStream", "Error getting stream " + e.toString());
-        } catch (Exception e) {
-            Log.e("Buffer Error", "Error converting result " + e.toString());
-        }
-        jsonStr = sb.toString();
-
-        if (jsonStr != null) {
-            try {
-                JSONObject jSonObj = new JSONObject(jsonStr);
-
-                // Getting JSON Array node
-                jSonProduct = jSonObj.getJSONObject(TAG_PRODUCT);
-                jSonKeywords = jSonProduct.getJSONArray(TAG_KEYWORDS);
-
-                // looping through All keywords
-                for (int i = 0; i < jSonKeywords.length(); i++) {
-                    String c = (String) jSonKeywords.get(i);
-
-                    // adding keyword to keywords list
-                    keywordsList.add(c);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                mNoValueFromProduct = true;
-            }
-        } else {
-            Log.e("JSon String null", "Couldn't get any data from the url");
-        }
-
-*/
         return null;
+    }
 
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        super.onPostExecute(aBoolean);
+        finalizeGetKeywordsList();
+        
+        if (mNoValueFromProduct){
+            // alert dialog to inform no info were found
+            new NoEntryFoundAlertDialog().show(mActivity.get().getFragmentManager(), "tag");
+        }
+        else{
+            mActivity.get().replaceAllInKeyWordsList(keywordsList);
+        }
     }
 
 
-    private void finalizeGetKeywordsList()
-    {
+    private void finalizeGetKeywordsList() {
         String name;
         String content;
         String[] res;
         int idx1;
         int idx2;
+        mNoValueFromProduct = true;
 
         Log.i("  doc :   ", document.toString());
         Element title = document.getElementsByTag("title").first();
@@ -178,10 +115,9 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
         idx1 = name.indexOf(": ") + 2;
         name = name.substring(idx1);
 
-        if (name.compareTo("Item Not Found") == 0){
+        if (name.compareTo("Item Not Found") == 0) {
             mNoValueFromProduct = true;
-        }
-        else{
+        } else {
             mNoValueFromProduct = false;
 
             Element aliments = document.getElementsByClass("data").first();
@@ -190,27 +126,25 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
             idx2 = content.indexOf("Size/Weight");
             content = content.substring(idx1, idx2);
             res = content.split(" ");
-            for (int i = 0; i < res.length; i++){
+            for (int i = 0; i < res.length; i++) {
                 keywordsList.add(i, res[i]);
             }
         }
-    }
+/*
+        for(Element alim : aliments) {
+            name = alim.attr("name");
+            if (name.compareTo("keywords") == 0)
+            {
+                content = alim.attr("content");
+                res = content.split(" ");
+                mNoValueFromProduct = false;
+                for (int i = 0; i < res.length; i++){
+                    keywordsList.add(i, res[i]);
+                }
+            }
+        }
 
-
-/*    public static InputStream getInputStreamFromUrl(String url) throws IOException
-    {
-        HttpParams httpParameters = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-
-        DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpPost httpPost = new HttpPost(url);
-
-        HttpResponse httpResponse = httpClient.execute(httpPost);
-        HttpEntity httpEntity = httpResponse.getEntity();
-
-        return httpEntity.getContent();
-    }
 */
+    }
 
 }
