@@ -127,8 +127,8 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         }
         if(v.getId()==R.id.scan_button){
             //scan + lancement recherche du produit (dans OnActivityResult)
-            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-            scanIntegrator.initiateScan();
+           // IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+           // scanIntegrator.initiateScan();
 
         }
         if(v.getId()==R.id.add_button){
