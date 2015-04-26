@@ -10,8 +10,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import android.content.Intent;
+import com.project.SYF.helper.DatabaseHelper;
+import com.project.SYF.model.Food;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -44,8 +47,8 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
 
         setContentView(R.layout.rechercherecette);
 
-        Intent intent = getIntent();
-        mAlimentList = intent.getStringArrayListExtra("ingredients");
+        // populate list of ingredients with elements in FOOD table
+        mAlimentList = getAliments();
 
         recetteList = new ArrayList<HashMap<String, String>>();
 
@@ -62,6 +65,21 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
         AsyncRechercheRecettes mTask = new AsyncRechercheRecettes(this, mAlimentList);
         mTask.execute();
 
+    }
+
+    /*
+     * Get list of aliments in FOOD table
+     */
+    private ArrayList<String> getAliments() {
+        ArrayList<String> resultList = new ArrayList<String>();
+        DatabaseHelper db = new DatabaseHelper(this); //my database helper file
+
+        List<Food> foodList = db.getAllInFood();
+
+        for (int i = 0; i < foodList.size(); i++) {
+            resultList.add(i, foodList.get(i).getName());
+        }
+        return resultList;
     }
 
 

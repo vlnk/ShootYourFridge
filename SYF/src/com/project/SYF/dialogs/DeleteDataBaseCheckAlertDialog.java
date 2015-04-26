@@ -21,13 +21,13 @@ public class DeleteDataBaseCheckAlertDialog extends DialogFragment {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener
                         () {
                     public void onClick(DialogInterface dialog, int id) {
-                        // nothing
+                        // User cancelled the dialog
                     }
                 })
                 .setNegativeButton("No", new DialogInterface
                         .OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // Delete from DataBase
+                        //delete the entry from the dataBase
                         Main callingActivity = (Main) getActivity();
                         callingActivity.deleteElementDataBase();
                     }

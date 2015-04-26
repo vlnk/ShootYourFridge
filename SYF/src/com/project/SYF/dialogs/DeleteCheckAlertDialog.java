@@ -31,7 +31,7 @@ public class DeleteCheckAlertDialog extends DialogFragment {
                         DialogFragment popUp = new DeleteDataBaseCheckAlertDialog();
                         popUp.show(getFragmentManager(), "tag");
 
-                        //delete the entry
+                        //delete the entry from the current list
                         Main callingActivity = (Main) getActivity();
                         callingActivity.deleteElementCurrentList();
 
