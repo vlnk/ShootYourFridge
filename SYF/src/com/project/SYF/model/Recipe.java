@@ -13,9 +13,8 @@ public class Recipe {
 
     public Recipe() {}
 
-    public Recipe(int id, String name, String details, String description,
+    public Recipe(String name, String details, String description,
                   String href){
-        this.id = id;
         this.name = name;
         this.description = description;
         this.href = href;
