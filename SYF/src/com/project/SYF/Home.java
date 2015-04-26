@@ -33,7 +33,8 @@ public class Home extends Activity implements View.OnClickListener{
             startActivity(validateIntent);
         }
         if(v.getId()==R.id.favoris_button){
-
+            Intent validateIntent = new Intent(this, Favoris.class);
+            startActivity(validateIntent);
         }
     }
 }

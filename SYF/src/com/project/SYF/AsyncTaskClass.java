@@ -90,7 +90,7 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     protected void onPostExecute(Boolean aBoolean) {
         super.onPostExecute(aBoolean);
         finalizeGetKeywordsList();
-        
+
         if (mNoValueFromProduct){
             // alert dialog to inform no info were found
             new NoEntryFoundAlertDialog().show(mActivity.get().getFragmentManager(), "tag");
@@ -143,7 +143,6 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
                 }
             }
         }
-
 */
     }
 
