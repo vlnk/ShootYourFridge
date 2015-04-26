@@ -19,6 +19,10 @@ import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,6 +46,9 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     private static final String url1 = "http://world.openfoodfacts" +
             ".org/api/v0/produit/";
     private static final String url2 = ".json";
+
+    private static final String htmlurl1 = "http://www.digit-eyes.com/cgi-bin/digiteyes.fcgi?action=upcList&upcCode=";
+    private static final String htmlurl2 = "#.VT0LY2S8PGd";
     private String mUrlString;
     private StringBuilder sb;
     private static final String TAG_PRODUCT = "product";
@@ -49,6 +56,8 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
 
     private ArrayList<String> keywordsList = new ArrayList<String>();
     private boolean mNoValueFromProduct;
+
+    private Document document;
 
     public AsyncTaskClass(Activity mainActivity, String urlEndString) {
         super();
@@ -82,13 +91,28 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
                     .show();
         }
         else{
+            finalizeGetKeywordsList();
             mActivity.get().replaceAllInKeyWordsList(keywordsList);
         }
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        String urlS = url1 + mUrlString + url2;
+
+
+        URL urlToCheck = null;
+
+        try {
+            urlToCheck = new URL(htmlurl1 + mUrlString + htmlurl2);
+            document = Jsoup.parse(urlToCheck, 5000);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("Coulndt get infofromURL", "Couldn't Parse HTML " + e.toString());
+        }
+
+
+
+     /* String urlS = url1 + mUrlString + url2;
         String jsonStr;
         InputStream input;
         JSONObject jSonProduct;
@@ -134,11 +158,35 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
             Log.e("JSon String null", "Couldn't get any data from the url");
         }
 
+*/
         return null;
 
     }
 
-    public static InputStream getInputStreamFromUrl(String url) throws IOException
+
+    private void finalizeGetKeywordsList()
+    {
+        String name;
+        String content;
+        String[] res;
+
+        Elements aliments = document.getElementsByTag("meta");
+
+        for(Element alim : aliments) {
+            name = alim.attr("name");
+            if (name.compareTo("keywords") == 0)
+            {
+                content = alim.attr("content");
+                res = content.split(" ");
+                for (int i = 0; i < res.length; i++){
+                    keywordsList.add(i, res[i]);
+                }
+            }
+        }
+    }
+
+
+/*    public static InputStream getInputStreamFromUrl(String url) throws IOException
     {
         HttpParams httpParameters = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
@@ -152,4 +200,6 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
 
         return httpEntity.getContent();
     }
+*/
+
 }

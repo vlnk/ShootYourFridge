@@ -70,8 +70,6 @@ public class AsyncRechercheRecettes extends AsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        InputStream input;
-
         URL urlToCheck = null;
 
         try {

@@ -130,7 +130,6 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
 
-
         }
         if(v.getId()==R.id.add_button){
             pushAddButton(addAlimentText.getText().toString(), false);
