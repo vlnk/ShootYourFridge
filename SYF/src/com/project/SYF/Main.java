@@ -11,8 +11,10 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.*;
+import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Food;
+import com.project.SYF.model.Catalog;
 import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
 import android.content.Intent;
@@ -99,23 +101,43 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
                 android.R.layout.simple_list_item_1,
                 mNameList);
         mainListView.setAdapter(mArrayAdapter);
-        // suppress element when click on it
-        //
-        // change to double click ?????
-        mainListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        // suppress element when long click on it
+        mainListView.setLongClickable(true);
+        mainListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int
+                    position, long id) {
+
+                // Alert Dialog : Deletion Check
+                DialogFragment dialog = new DeleteCheckAlertDialog();
+                dialog.show(getFragmentManager(), "tag");
+
+
+
+                /*
                 String name = mNameList.get(position);
                 db.deleteAliment(name);
 
                 mNameList.remove(position);
                 mArrayAdapter.notifyDataSetChanged();
+
+                */
+                return true;
             }
+
+
         });
+
 
         //Validate Button
         validBtn = (Button) findViewById(R.id.validate_button);
         validBtn.setOnClickListener(this);
     }
+
+
+
+
 
 
 
@@ -127,8 +149,8 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         }
         if(v.getId()==R.id.scan_button){
             //scan + lancement recherche du produit (dans OnActivityResult)
-           // IntentIntegrator scanIntegrator = new IntentIntegrator(this);
-           // scanIntegrator.initiateScan();
+            IntentIntegrator scanIntegrator = new IntentIntegrator(this);
+            scanIntegrator.initiateScan();
 
         }
         if(v.getId()==R.id.add_button){
@@ -198,17 +220,21 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
         //retrieve scan result
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
-            //we have a result
-       /*     String scanContent = scanningResult.getContents();
-            String scanFormat = scanningResult.getFormatName();
-            formatTxt.setText("FORMAT: " + scanFormat);
-            contentTxt.setText("CONTENT: " + scanContent);
-         */
+
             mCurrentBarCode = scanningResult.getContents();
 
-            AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
-            mTask.execute();
+            DatabaseHelper db = new DatabaseHelper(this);
+            String newAliment = db.getCatalogByScan(mCurrentBarCode);
 
+            // if element exists in database
+            if (newAliment != null) {
+                mNameList.add(newAliment);
+            }
+            else {
+                // else, the element is searched on the Internet
+                AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
+                mTask.execute();
+            }
         }
 
     }
@@ -230,6 +256,7 @@ public class Main extends Activity implements View.OnClickListener, AdapterView.
     {
         mCurrentBarCode = null;
     }
+
 
     /*
      * Populate mNameList with the elements in the dataBase
