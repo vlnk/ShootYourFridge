@@ -10,6 +10,8 @@ import android.widget.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.project.SYF.helper.DatabaseHelper;
+import com.project.SYF.model.Recipe;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -18,7 +20,11 @@ import org.jsoup.nodes.Element;
  */
 public class AffichageRecette extends Activity implements View.OnClickListener{
 
-    private static String mHref;
+    private static String mRecipeHref;
+    private static String mRecipeName;
+    private static String mRecipeDetails;
+    private static String mRecipeDescription;
+
     private static TextView mTempsPrepa;
     private static TextView mTempsCuisson;
     private static TextView mIngredients;
@@ -36,9 +42,10 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         setContentView(R.layout.affichagerecette);
 
         Intent intent = getIntent();
-        mCurrentRecipe = intent.getStringExtra("current recipe");
-
-        mHref = mCurrentRecipe.getHref();
+        mRecipeHref  = intent.getStringExtra("href");
+        mRecipeName  = intent.getStringExtra("name");
+        mRecipeDetails  = intent.getStringExtra("details");
+        mRecipeDescription  = intent.getStringExtra("description");
 
         mTempsPrepa = (TextView)findViewById(R.id.temps_preparation);
         mTempsCuisson = (TextView)findViewById(R.id.temps_cuisson);
@@ -50,7 +57,7 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
 
         mAddToFavorisBtn.setOnClickListener(this);
 
-        AsyncGetRecette mTask = new AsyncGetRecette(this, mHref);
+        AsyncGetRecette mTask = new AsyncGetRecette(this, mRecipeHref);
         mTask.execute();
 
     }
@@ -87,9 +94,8 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        //rechercher dans la BD si la recette y est deja
-
-        //si non, on l'ajoute a la BD
-            //Sans oublier de bine mettre l'ID
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        Recipe thisRecipe = new Recipe(mRecipeName, mRecipeDetails, mRecipeDescription, mRecipeHref);
+        db.addRecipe(thisRecipe);
     }
 }
