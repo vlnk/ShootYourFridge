@@ -25,8 +25,7 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     private static final int timeoutSocket = 5000;
 
     @SuppressWarnings("unused")
-    private static final String url1 = "http://world.openfoodfacts" +
-            ".org/api/v0/produit/";
+    private static final String url1 = "http://world.openfoodfacts" + ".org/api/v0/produit/";
 
     @SuppressWarnings("unused")
     private static final String url2 = ".json";
@@ -106,13 +105,19 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
             mNoValueFromProduct = false;
 
             Element aliments = document.getElementsByClass("data").first();
-            content = aliments.text();
-            idx1 = content.indexOf("Description ") + 12;
-            idx2 = content.indexOf("Size/Weight");
-            content = content.substring(idx1, idx2);
-            res = content.split(" ");
-            for (int i = 0; i < res.length; i++) {
-                keywordsList.add(i, res[i]);
+
+            try {
+                content = aliments.text();
+                idx1 = content.indexOf("Description ") + 12;
+                idx2 = content.indexOf("Size/Weight");
+                content = content.substring(idx1, idx2);
+                res = content.split(" ");
+                for (int i = 0; i < res.length; i++) {
+                    keywordsList.add(i, res[i]);
+                }
+            }
+            catch (NullPointerException e) {
+                e.printStackTrace();
             }
         }
     }
