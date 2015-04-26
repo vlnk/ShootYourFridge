@@ -5,5 +5,10 @@
     <string name="add_button">Add</string>
     <string name="add_aliment">Add Aliment</string>
     <string name="validate_button">Validate List</string>
+
+
+    <string name="no_info_validate">Yes</string>
+    <string name="no_info_cancel">No</string>
+
 </resources>
 
