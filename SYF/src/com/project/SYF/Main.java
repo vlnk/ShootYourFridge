@@ -9,7 +9,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.project.SYF.dialogs.ManualAlertDialog;
 import com.project.SYF.dialogs.ModifyDeleteAlertDialog;
+import com.project.SYF.dialogs.ScanAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Catalog;
 import com.project.SYF.model.Food;
@@ -21,18 +23,18 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("Convert2Lambda")
+
 public class Main extends Activity {
     private Button mValidButton;
 
-    private View mPopupView = null;
-    private PopupWindow mPopup;
+    public View mPopupView = null;
+    public PopupWindow mPopup;
 
-    private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
-    private ArrayList<String> mNameList = new ArrayList<String>();
+    public ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
+    public ArrayList<String> mNameList = new ArrayList<String>();
 
     @SuppressWarnings("CanBeFinal")
-    private ArrayList<String> mResultList = new ArrayList<String>();
+    public ArrayList<String> mResultList = new ArrayList<String>();
 
     private int positionToDelete;
     public String nameToModify;
@@ -133,6 +135,8 @@ public class Main extends Activity {
         mtoast.show();
     }
 
+
+
     public void scan(View view) {
         //scan + lancement recherche du produit (dans OnActivityResult)
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
@@ -147,7 +151,14 @@ public class Main extends Activity {
         startActivity(validateIntent);
     }
 
+
+    /**
+     *  Launch the Dialog to add a new ingredient
+     * */
     public void addPopup(View view) {
+        //DialogFragment dialog = new ScanAlertDialog();
+        //dialog.show(getFragmentManager(), "tag");
+
         if (mPopupView == null) {
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mPopupView = inflater.inflate(R.layout.add_popup, null, false);
@@ -156,6 +167,7 @@ public class Main extends Activity {
             ListView resultListView = (ListView) mPopupView.findViewById(R.id.list_proposal);
             mArrayAdapterResult = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mResultList);
             resultListView.setAdapter(mArrayAdapterResult);
+
 
             resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -172,22 +184,51 @@ public class Main extends Activity {
         );
 
         mPopup.setOutsideTouchable(true);
-        mPopup.showAtLocation(this.findViewById(R.id.main), Gravity.CENTER, 0, 0);
+        mPopup.showAtLocation(this.findViewById(R.id.main), Gravity.CENTER,
+                0, 0);
     }
 
+    /*
     public void addAliment(View view) {
         EditText addAlimentText = (EditText) mPopupView.findViewById(R.id.add_aliment_text);
         pushAddButton(addAlimentText.getText().toString(), false);
         addAlimentText.setText("");
 
         mPopup.dismiss();
+    }*/
+
+
+
+    /**
+     * Launch dialog to scan and add new ingredient
+     * */
+    public void addPopup_scan() {
+
+        DialogFragment dialog = new ScanAlertDialog();
+        dialog.show(getFragmentManager(), "tag");
     }
+
+    /**
+     * Launch dialog to add new ingredient manually
+     * */
+    public void addPopup_manual() {
+        DialogFragment dialog = new ManualAlertDialog();
+        dialog.show(getFragmentManager(), "tag");
+    }
+
+    public void addPopup_manual(View view) {
+        addPopup_manual();
+    }
+
+
+
+
 
     /**
      * Add aliment to the current list, and to the database
      *      when button "Add" is pressed
      * */
-    private void pushAddButton(String toListText, boolean withBarCode){
+    public void pushAddButton(String toListText, boolean withBarCode){
         // if string not empty
         if ("".compareTo(toListText) != 0){
             boolean estdeja = false;
@@ -222,7 +263,14 @@ public class Main extends Activity {
     public void replaceAllInKeyWordsList(ArrayList<String> keywordsList){
         mResultList.clear();
         mResultList.addAll(keywordsList);
-        mArrayAdapterResult.notifyDataSetChanged();
+        //mArrayAdapterResult.notifyDataSetChanged();
+
+        if (mResultList.isEmpty()){
+            addPopup_manual();
+        }
+        else{
+            addPopup_scan();
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -245,17 +293,17 @@ public class Main extends Activity {
             String newAliment = db.getCatalogByScan(mCurrentBarCode);
 
             // if element exists in database
-            if (newAliment != null) {
-                mNameList.add(newAliment);
-            }
-            else {
+            //if (newAliment != null) {
+              //  mNameList.add(newAliment);
+            //}
+            //else {
                 // else, the element is searched on the Internet
-                //AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
-                //mTask.execute();
-                Toast mtoast = Toast.makeText(getApplicationContext(), "FAIL"
+                AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
+                mTask.execute();
+                /*Toast mtoast = Toast.makeText(getApplicationContext(), "FAIL"
                         , Toast.LENGTH_SHORT);
-                mtoast.show();
-            }
+                mtoast.show();*/
+            //}
 
         }
         else {
