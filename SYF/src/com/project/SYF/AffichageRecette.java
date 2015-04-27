@@ -89,11 +89,12 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         String cuisson = duree.substring(idx);
 
         Element recettePhoto = document.getElementsByClass("photo").first();
-        String photoUrl = recettePhoto.attr("src");
+        if (recettePhoto != null) {
+            String photoUrl = recettePhoto.attr("src");
 
-        ImageView imageView = (ImageView) findViewById(R.id.photo);
-        Picasso.with(this).load(photoUrl).into(imageView);
-
+            ImageView imageView = (ImageView) findViewById(R.id.photo);
+            Picasso.with(this).load(photoUrl).into(imageView);
+        }
         ingredients = ingredients.replace("- ", "\n- ");
 
         idx = infos.indexOf(": ") + 1;
