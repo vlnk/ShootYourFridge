@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,6 +16,7 @@ import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Recipe;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by robinvermes on 25/04/2015.
@@ -84,6 +87,12 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         int idx = duree.indexOf("Temps de cuisson");
         String preparation = duree.substring(0, idx);
         String cuisson = duree.substring(idx);
+
+        Element recettePhoto = document.getElementsByClass("photo").first();
+        String photoUrl = recettePhoto.attr("src");
+
+        ImageView imageView = (ImageView) findViewById(R.id.photo);
+        Picasso.with(this).load(photoUrl).into(imageView);
 
         ingredients = ingredients.replace("- ", "\n- ");
 
