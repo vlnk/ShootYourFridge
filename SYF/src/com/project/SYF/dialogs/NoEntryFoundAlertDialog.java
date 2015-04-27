@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+@SuppressWarnings("unused")
 public class NoEntryFoundAlertDialog extends DialogFragment {
 
     @SuppressWarnings("Convert2Lambda")

@@ -50,6 +50,7 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
 
     private Document document;
 
+    @SuppressWarnings("unused")
     public AsyncTaskClass(Activity mainActivity, String urlEndString) {
         super();
         this.mActivity = new WeakReference<>((Main) mainActivity);

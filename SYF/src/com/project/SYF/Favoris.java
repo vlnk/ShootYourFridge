@@ -6,13 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
-import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.dialogs.DeleteFavorisCheckAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Recipe;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,11 +17,11 @@ import java.util.List;
 /**
  * Created by annesohier on 26/04/2015.
  */
+@SuppressWarnings("Convert2Lambda")
 public class Favoris extends ListActivity implements AdapterView.OnItemClickListener {
 
     private ArrayList<HashMap<String, String>> recetteList;
 
-    private ListView mRecetteListView;
     private ListAdapter adapter;
 
     private static final String TAG_NAME = "name";
@@ -42,10 +38,10 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
         setContentView(R.layout.rechercherecette);
 
         //recuperation depuis la BD A FAIRE
-        recetteList = new ArrayList<HashMap<String, String>>();
+        recetteList = new ArrayList<>();
         getRecipes();
 
-        mRecetteListView = getListView();
+        ListView mRecetteListView = getListView();
 
         mRecetteListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,7 +83,7 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
         List<Recipe> recipeList = db.getAllInRecipe();
 
         for (Recipe currentRecipe : recipeList){
-            HashMap<String, String> uneRecette = new HashMap<String, String>();
+            HashMap<String, String> uneRecette = new HashMap<>();
             uneRecette.put(TAG_NAME, currentRecipe.getName());
             uneRecette.put(TAG_DETAILS, currentRecipe.getDetails());
             uneRecette.put(TAG_DESCRIPTION, currentRecipe.getDescription());
@@ -99,7 +95,7 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
 
     public void deleteElementCurrentList(){
         DatabaseHelper db = new DatabaseHelper(this);
-        HashMap<String, String> uneRecette = new HashMap<String, String>();
+        HashMap<String, String> uneRecette;
         uneRecette = recetteList.get(positionToDelete);
         db.deleteRecipe(uneRecette.get(TAG_NAME));
 

@@ -10,18 +10,16 @@ import android.widget.Button;
  * Created by annesohier on 26/04/2015.
  */
 
+@SuppressWarnings("DefaultFileTemplate")
 public class Home extends Activity implements View.OnClickListener{
-
-    private Button scannerBtn;
-    private Button favorisBtn;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.home);
 
-        scannerBtn = (Button)findViewById(R.id.scanlauncher_button);
-        favorisBtn = (Button)findViewById(R.id.favoris_button);
+        Button scannerBtn = (Button) findViewById(R.id.scanlauncher_button);
+        Button favorisBtn = (Button) findViewById(R.id.favoris_button);
 
         scannerBtn.setOnClickListener(this);
         favorisBtn.setOnClickListener(this);

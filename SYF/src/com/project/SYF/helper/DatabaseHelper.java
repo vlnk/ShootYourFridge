@@ -111,6 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Removing 1 element from FOOD
+    @SuppressWarnings("unused")
     public void deleteAliment(Food food) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_FOODS, KEY_ID + " = ?",
@@ -127,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in FOOD
     public List<Food> getAllInFood() {
-        List<Food> foodList = new ArrayList<Food>();
+        List<Food> foodList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_FOODS;
 
@@ -151,6 +152,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Getting single element in FOOD by scan ID
+    @SuppressWarnings("unused")
     public String getFoodByScan(String scan) {
         SQLiteDatabase db = this.getReadableDatabase();
         String name = null;
@@ -181,6 +183,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             c.moveToFirst();
 
         Food result = new Food();
+        assert c != null;
         result.setId(Integer.parseInt(c.getString(0)));
         result.setScanId(c.getString(1));
         result.setName(c.getString(2));
@@ -189,6 +192,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Updating single FOOD element
+    @SuppressWarnings("UnusedReturnValue")
     public int updateAliment(Food fd, String newName) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -221,6 +225,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Removing 1 element from CATALOG
+    @SuppressWarnings("unused")
     public void deleteCatalog(Catalog cat) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CATALOG, KEY_CAT_ID + " = ?",
@@ -238,7 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in CATALOG
     public List<Catalog> getAllInCatalog() {
-        List<Catalog> catList = new ArrayList<Catalog>();
+        List<Catalog> catList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_CATALOG;
 
@@ -279,6 +284,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Updating single CATALOG element
+    @SuppressWarnings("unused")
     public int updateCatalogElement(Catalog alimentToModify, String newName) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -312,6 +318,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Updating single CATALOG element
+    @SuppressWarnings("UnusedReturnValue")
     public int updateCatalog(Catalog cat, String newName) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -371,7 +378,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in RECIPE
     public List<Recipe> getAllInRecipe() {
-        List<Recipe> recipeList = new ArrayList<Recipe>();
+        List<Recipe> recipeList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_RECIPE;
 
@@ -398,6 +405,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Getting single recipe by name
+    @SuppressWarnings("unused")
     public String getRecipeByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
 

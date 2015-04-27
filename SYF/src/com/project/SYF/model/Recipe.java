@@ -23,6 +23,7 @@ public class Recipe {
 
 
     // getters
+    @SuppressWarnings("unused")
     public int getId() { return id; }
     public String getName() { return name; }
     public String getDetails() { return details; }
@@ -34,6 +35,7 @@ public class Recipe {
     public void setHref(String href) { this.href = href; }
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name;  }
+    @SuppressWarnings("unused")
     public void setDetails(String details) { this.details = details; }
 
     public void setDescription(String description) {

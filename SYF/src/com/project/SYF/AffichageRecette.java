@@ -3,14 +3,8 @@ package com.project.SYF;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Recipe;
@@ -21,6 +15,7 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by robinvermes on 25/04/2015.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class AffichageRecette extends Activity implements View.OnClickListener{
 
     private static String mRecipeHref;
@@ -35,7 +30,7 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
     private static TextView mPreparation;
     private static TextView mNameRecette;
 
-
+    @SuppressWarnings("unused")
     private static Recipe mCurrentRecipe;
 
     private Button mAddToFavorisBtn;

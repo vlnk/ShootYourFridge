@@ -5,11 +5,11 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import com.project.SYF.Main;
 
 /**
  * Created by mimmy on 26/04/15.
  */
+@SuppressWarnings("Convert2Lambda")
 public class ModifyDeleteAlertDialog extends DialogFragment {
 
     @Override

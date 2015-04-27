@@ -112,6 +112,7 @@ import android.util.Log;
  * @author Brad Drehmer
  * @author gcstang
  */
+@SuppressWarnings("Convert2Lambda")
 public class IntentIntegrator {
 
     public static final int REQUEST_CODE = 0x0000c0de; // Only use bottom 16 bits
@@ -152,7 +153,7 @@ public class IntentIntegrator {
     private String buttonYes;
     private String buttonNo;
     private List<String> targetApplications;
-    private final Map<String,Object> moreExtras = new HashMap<String,Object>(3);
+    private final Map<String,Object> moreExtras = new HashMap<>(3);
 
     /**
      * @param activity {@link Activity} invoking the integration
@@ -297,6 +298,7 @@ public class IntentIntegrator {
      * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
      *   if a prompt was needed, or null otherwise
      */
+    @SuppressWarnings("deprecation")
     public final AlertDialog initiateScan(Collection<String> desiredBarcodeFormats, int cameraId) {
         Intent intentScan = new Intent(BS_PACKAGE + ".SCAN");
         intentScan.addCategory(Intent.CATEGORY_DEFAULT);
@@ -340,7 +342,8 @@ public class IntentIntegrator {
      * @see android.app.Activity#startActivityForResult(Intent, int)
      * @see android.app.Fragment#startActivityForResult(Intent, int)
      */
-    protected void startActivityForResult(Intent intent, int code) {
+    @SuppressWarnings("SameParameterValue")
+    protected void startActivityForResult(Intent intent, @SuppressWarnings("SameParameterValue") int code) {
         if (fragment == null) {
             activity.startActivityForResult(intent, code);
         } else {
@@ -459,11 +462,11 @@ public class IntentIntegrator {
      * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
      *   if a prompt was needed, or null otherwise
      */
-    public final AlertDialog shareText(CharSequence text, CharSequence type) {
+    public final AlertDialog shareText(CharSequence text, @SuppressWarnings({"SameParameterValue", "UnusedParameters"}) CharSequence type) {
         Intent intent = new Intent();
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.setAction(BS_PACKAGE + ".ENCODE");
-        intent.putExtra("ENCODE_TYPE", type);
+        intent.putExtra("ENCODE_TYPE", "TEXT_TYPE");
         intent.putExtra("ENCODE_DATA", text);
         String targetAppPackage = findTargetAppPackage(intent);
         if (targetAppPackage == null) {

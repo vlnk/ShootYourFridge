@@ -1,18 +1,14 @@
 package com.project.SYF;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.dialogs.ModifyDeleteAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Catalog;
@@ -21,23 +17,16 @@ import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
 import android.content.Intent;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import android.view.View.OnClickListener;
-import org.json.JSONObject;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("Convert2Lambda")
 public class Main extends Activity {
     private Button mValidButton;
 
     private View mPopupView = null;
     private PopupWindow mPopup;
-    private ListView resultListView;
 
     private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
     private ArrayList<String> mNameList = new ArrayList<>();
@@ -63,13 +52,6 @@ public class Main extends Activity {
         db = new DatabaseHelper(getApplicationContext());
         mNameList = getResults();
         initializeDb();
-
-        //Scan button
-        Button scanBtn = (Button) findViewById(R.id.scan_button);
-
-        //ADD BUTTON
-        ImageButton addBtn = (ImageButton) findViewById(R.id.add_button);
-
 
         //ALIMENT LIST
         ListView mainListView = (ListView) findViewById(R.id.aliments_list);
@@ -171,7 +153,7 @@ public class Main extends Activity {
             mPopupView = inflater.inflate(R.layout.add_popup, null, false);
 
             //LIST RESULT
-            resultListView = (ListView) mPopupView.findViewById(R.id.list_proposal);
+            ListView resultListView = (ListView) mPopupView.findViewById(R.id.list_proposal);
             mArrayAdapterResult = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mResultList);
             resultListView.setAdapter(mArrayAdapterResult);
 
