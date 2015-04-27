@@ -26,7 +26,7 @@ public class ManualAlertDialog extends DialogFragment {
         builder.setTitle("Manual entry")
                 .setMessage("Enter a new ingredient")
                 .setView(input)
-                .setPositiveButton("Modify", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // confirm modification
 

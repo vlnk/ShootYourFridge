@@ -47,6 +47,16 @@ public class ScanAlertDialog extends DialogFragment {
                 activity.mResultList);
 
         list.setAdapter(adapter);
+
+        list.setOnItemClickListener(new ListView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Main activity = (Main) getActivity();
+                activity.pushAddButton(activity.mResultList.get(position),
+                        true);
+                dismiss();
+            }
+        });
+
         builder.setView(list);
 
         return builder.create();
