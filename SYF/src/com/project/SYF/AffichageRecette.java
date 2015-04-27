@@ -112,11 +112,17 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        String toToastString;
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
         Recipe thisRecipe = new Recipe(mRecipeName, mRecipeDetails, mRecipeDescription, mRecipeHref);
-        db.addRecipe(thisRecipe);
+        if(db.addRecipe(thisRecipe)){
+            toToastString = "Déjà dans les favoris";
+        }
+        else{
+            toToastString = "Enregistrement effectué";
+        }
 
-        Toast mtoast = Toast.makeText(getApplicationContext(), "Enregistrement effectué", Toast.LENGTH_SHORT);
+        Toast mtoast = Toast.makeText(getApplicationContext(), toToastString, Toast.LENGTH_SHORT);
         mtoast.show();
     }
 }
