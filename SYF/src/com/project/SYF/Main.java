@@ -141,19 +141,31 @@ public class Main extends Activity {
                 });
     }
 
+    /*
+     * Delete element from current list and FOOD table
+     */
     public void deleteElementCurrentList(){
         String name = mNameList.get(positionToDelete);
         db.deleteAliment(name);
 
         mNameList.remove(positionToDelete);
         mArrayAdapter.notifyDataSetChanged();
+        Toast mtoast = Toast.makeText(getApplicationContext(), "Ingredient " +
+                "deleted", Toast.LENGTH_SHORT);
+        mtoast.show();
     }
 
+    /*
+     * Delete element from CATALOG table
+     */
     public void deleteElementDataBase() {
         String name = mNameList.get(positionToDelete);
         db.deleteCatalog(name);
     }
 
+    /*
+     * Modify name in current list, FOOD and CATALOG table
+     */
     public void modifyName(String modifiedName) {
 
         String name = mNameList.get(positionToDelete);
@@ -165,6 +177,9 @@ public class Main extends Activity {
         mNameList.clear();
         mNameList.addAll(getResults());
         mArrayAdapter.notifyDataSetChanged();
+        Toast mtoast = Toast.makeText(getApplicationContext(), "Ingredient " +
+                "modified", Toast.LENGTH_SHORT);
+        mtoast.show();
     }
 
 
