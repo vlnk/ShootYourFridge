@@ -80,11 +80,15 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
     private ArrayList<String> getAliments() {
         ArrayList<String> resultList = new ArrayList<String>();
         DatabaseHelper db = new DatabaseHelper(this); //my database helper file
+        String aliment;
 
         List<Food> foodList = db.getAllInFood();
 
         for (int i = 0; i < foodList.size(); i++) {
-            resultList.add(i, foodList.get(i).getName());
+            aliment = foodList.get(i).getName();
+            aliment = aliment.replace(' ', '-');
+            
+            resultList.add(i, aliment);
         }
         return resultList;
     }

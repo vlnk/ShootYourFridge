@@ -13,6 +13,9 @@ import com.project.SYF.model.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by mimmy on 25/04/15.
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Logcat tag
@@ -108,7 +111,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Removing 1 element from FOOD
-    @SuppressWarnings("unused")
     public void deleteAliment(Food food) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_FOODS, KEY_ID + " = ?",
@@ -125,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in FOOD
     public List<Food> getAllInFood() {
-        List<Food> foodList = new ArrayList<>();
+        List<Food> foodList = new ArrayList<Food>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_FOODS;
 
@@ -148,8 +150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return foodList;
     }
 
-    // Getting single element in FOOD
-    @SuppressWarnings("unused")
+    // Getting single element in FOOD by scan ID
     public String getFoodByScan(String scan) {
         SQLiteDatabase db = this.getReadableDatabase();
         String name = null;
@@ -158,16 +159,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + KEY_SCAN_ID + " = " + scan;
 
         Log.e(LOG, selectQuery);
-
         Cursor c = db.rawQuery(selectQuery, null);
-
         if (c.moveToFirst())
-        {
             name = c.getString(c.getColumnIndex(KEY_NAME));
-        }
 
         return name;
     }
+
+    // Getting single element in FOOD by name
+    public Food getFoodByName(String nameToSearch) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+
+        String selectQuery = "SELECT  * FROM " + TABLE_FOODS + " WHERE "
+                + KEY_NAME + " = " + nameToSearch;
+
+        Log.e(LOG, selectQuery);
+        Cursor c = db.rawQuery("SELECT  * FROM " + TABLE_FOODS + " WHERE "
+                + KEY_NAME + " = ?", new String[] {nameToSearch});
+        if (c != null)
+            c.moveToFirst();
+
+        Food result = new Food();
+        result.setId(Integer.parseInt(c.getString(0)));
+        result.setScanId(c.getString(1));
+        result.setName(c.getString(2));
+
+        return result;
+    }
+
+    // Updating single FOOD element
+    public int updateAliment(Food fd, String newName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, newName);
+
+        // updating row
+        return db.update(TABLE_FOODS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(fd.getId()) });
+    }
+
 
 
 
@@ -189,7 +221,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Removing 1 element from CATALOG
-    @SuppressWarnings("unused")
     public void deleteCatalog(Catalog cat) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CATALOG, KEY_CAT_ID + " = ?",
@@ -207,7 +238,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in CATALOG
     public List<Catalog> getAllInCatalog() {
-        List<Catalog> catList = new ArrayList<>();
+        List<Catalog> catList = new ArrayList<Catalog>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_CATALOG;
 
@@ -247,30 +278,100 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return name;
     }
 
+    // Updating single CATALOG element
+    public int updateCatalogElement(Catalog alimentToModify, String newName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CAT_NAME, newName);
+
+        // updating row
+        return db.update(TABLE_CATALOG, values, KEY_CAT_ID + " = ?",
+                new String[] { String.valueOf(alimentToModify.getId()) });
+    }
+
+
+    // Getting single element in CATALOG by name
+    public Catalog getCatalogByName(String nameToSearch) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Catalog result = new Catalog();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_CATALOG + " WHERE "
+                + KEY_CAT_NAME + " = " + nameToSearch;
+
+        Log.e(LOG, selectQuery);
+        Cursor c = db.rawQuery("SELECT  * FROM " + TABLE_CATALOG + " WHERE "
+                + KEY_CAT_NAME + " = ?", new String[] {nameToSearch});
+        if (c.moveToFirst())
+        {
+            result.setId(Integer.parseInt(c.getString(0)));
+            result.setScanId(c.getString(1));
+            result.setName(c.getString(2));
+        }
+        return result;
+    }
+
+    // Updating single CATALOG element
+    public int updateCatalog(Catalog cat, String newName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CAT_NAME, newName);
+
+        // updating row
+        return db.update(TABLE_CATALOG, values, KEY_CAT_ID + " = ?",
+                new String[] { String.valueOf(cat.getId()) });
+    }
+
 
     // ------------------------ "Recipe" table methods ----------------//
 
     // Adding new element to RECIPE
-    @SuppressWarnings("unused")
-    public void addRecipe(Recipe rec) {
+    public boolean addRecipe(Recipe rec) {
+        boolean ret = isAlreadyIn(rec);
+        if (!ret){
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+
+            values.put(KEY_REC_NAME, rec.getName());
+            values.put(KEY_REC_DETAILS, rec.getDetails());
+            values.put(KEY_REC_DESCRIPTION, rec.getDescription());
+            values.put(KEY_REC_HREF, rec.getHref());
+
+            // Inserting Row
+            db.insert(TABLE_RECIPE, null, values);
+            db.close(); // Closing database connection
+        }
+
+        return ret;
+    }
+
+    // Removing 1 element by name from RECIPE
+    public void deleteRecipe(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECIPE, KEY_REC_NAME + " = ?", new String[]{name});
+        db.close();
+    }
 
-        ContentValues values = new ContentValues();
+    public boolean isAlreadyIn(Recipe rec){
+        boolean ret = false;
+        String nameToSearch = rec.getName();
+        String descriptionToSearch = rec.getDescription();
+        List<Recipe> listRecipes = getAllInRecipe();
+        for (Recipe currentRec : listRecipes){
+            if (nameToSearch.compareTo(currentRec.getName()) == 0
+                    && descriptionToSearch.compareTo(currentRec.getDescription()) == 0){
+                ret = true;
+            }
+        }
 
-        values.put(KEY_REC_NAME, rec.getName());
-        values.put(KEY_REC_DETAILS, rec.getDetails());
-        values.put(KEY_REC_DESCRIPTION, rec.getDescription());
-        values.put(KEY_REC_HREF, rec.getHref());
-
-        // Inserting Row
-        db.insert(TABLE_RECIPE, null, values);
-        db.close(); // Closing database connection
+        return ret;
     }
 
     // Getting All elements in RECIPE
-    @SuppressWarnings("unused")
     public List<Recipe> getAllInRecipe() {
-        List<Recipe> recipeList = new ArrayList<>();
+        List<Recipe> recipeList = new ArrayList<Recipe>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_RECIPE;
 
@@ -297,7 +398,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Getting single recipe by name
-    @SuppressWarnings("unused")
     public String getRecipeByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
 

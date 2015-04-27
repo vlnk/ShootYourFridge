@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,6 +16,7 @@ import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Recipe;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by robinvermes on 25/04/2015.
@@ -30,6 +33,8 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
     private static TextView mIngredients;
     private static TextView mTitrePreparation;
     private static TextView mPreparation;
+    private static TextView mNameRecette;
+
 
     private static Recipe mCurrentRecipe;
 
@@ -44,11 +49,10 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         mRecipeHref  = intent.getStringExtra("href");
 
         mThereIsButton = intent.getStringExtra("thereIsButton");
+        mRecipeName  = intent.getStringExtra("name");
 
         if (mThereIsButton.compareTo("true") == 0) {
             setContentView(R.layout.affichagerecette);
-
-            mRecipeName  = intent.getStringExtra("name");
             mRecipeDetails  = intent.getStringExtra("details");
             mRecipeDescription  = intent.getStringExtra("description");
 
@@ -59,6 +63,8 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
             setContentView(R.layout.affichagerecettefavoris);
         }
 
+        mNameRecette = (TextView)findViewById(R.id.name);
+        mNameRecette.setText(mRecipeName);
         mTempsPrepa = (TextView)findViewById(R.id.temps_preparation);
         mTempsCuisson = (TextView)findViewById(R.id.temps_cuisson);
         mIngredients = (TextView)findViewById(R.id.ingredients);
@@ -85,6 +91,13 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         String preparation = duree.substring(0, idx);
         String cuisson = duree.substring(idx);
 
+        Element recettePhoto = document.getElementsByClass("photo").first();
+        if (recettePhoto != null) {
+            String photoUrl = recettePhoto.attr("src");
+
+            ImageView imageView = (ImageView) findViewById(R.id.photo);
+            Picasso.with(this).load(photoUrl).into(imageView);
+        }
         ingredients = ingredients.replace("- ", "\n- ");
 
         idx = infos.indexOf(": ") + 1;
@@ -102,11 +115,17 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        String toToastString;
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
         Recipe thisRecipe = new Recipe(mRecipeName, mRecipeDetails, mRecipeDescription, mRecipeHref);
-        db.addRecipe(thisRecipe);
+        if(db.addRecipe(thisRecipe)){
+            toToastString = "Déjà dans les favoris";
+        }
+        else{
+            toToastString = "Enregistrement effectué";
+        }
 
-        Toast mtoast = Toast.makeText(getApplicationContext(), "Enregistrement effectué", Toast.LENGTH_SHORT);
+        Toast mtoast = Toast.makeText(getApplicationContext(), toToastString, Toast.LENGTH_SHORT);
         mtoast.show();
     }
 }

@@ -9,6 +9,7 @@ import android.widget.Button;
 /**
  * Created by annesohier on 26/04/2015.
  */
+
 public class Home extends Activity implements View.OnClickListener{
 
     private Button scannerBtn;
