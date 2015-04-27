@@ -84,10 +84,10 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
 
     private void getRecipes() {
         DatabaseHelper db = new DatabaseHelper(this); //my database helper file
-        HashMap<String, String> uneRecette = new HashMap<String, String>();
         List<Recipe> recipeList = db.getAllInRecipe();
 
         for (Recipe currentRecipe : recipeList){
+            HashMap<String, String> uneRecette = new HashMap<String, String>();
             uneRecette.put(TAG_NAME, currentRecipe.getName());
             uneRecette.put(TAG_DETAILS, currentRecipe.getDetails());
             uneRecette.put(TAG_DESCRIPTION, currentRecipe.getDescription());

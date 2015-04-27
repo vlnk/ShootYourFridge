@@ -281,9 +281,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean isAlreadyIn(Recipe rec){
         boolean ret = false;
         String nameToSearch = rec.getName();
+        String descriptionToSearch = rec.getDescription();
         List<Recipe> listRecipes = getAllInRecipe();
         for (Recipe currentRec : listRecipes){
-            if (nameToSearch.compareTo(currentRec.getName()) == 0){
+            if (nameToSearch.compareTo(currentRec.getName()) == 0
+                    && descriptionToSearch.compareTo(currentRec.getDescription()) == 0){
                 ret = true;
             }
         }
