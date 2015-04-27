@@ -16,6 +16,7 @@ import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Recipe;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by robinvermes on 25/04/2015.
@@ -88,13 +89,10 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         String cuisson = duree.substring(idx);
 
         Element recettePhoto = document.getElementsByClass("photo").first();
-        URL photoUrl;
-        try {
-            photoUrl = new URL(recettePhoto.attr("src"));
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("Image load fail", "Couldn't load image from URL" + e.toString());
-        }
+        String photoUrl = recettePhoto.attr("src");
+
+        ImageView imageView = (ImageView) findViewById(R.id.photo);
+        Picasso.with(this).load("http://i.imgur.com/DvpvklR.png").into(imageView);
 
         ingredients = ingredients.replace("- ", "\n- ");
 
