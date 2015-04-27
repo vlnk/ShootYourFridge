@@ -1,20 +1,17 @@
 package com.project.SYF.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
 import com.project.SYF.Main;
-import com.project.SYF.R;
 
 /**
  * Created by mimmy on 26/04/15.
  */
 
+@SuppressWarnings("Convert2Lambda")
 public class DeleteCheckAlertDialog extends DialogFragment {
 
     @Override

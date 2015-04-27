@@ -10,6 +10,7 @@ import com.project.SYF.Main;
 /**
  * Created by mimmy on 26/04/15.
  */
+@SuppressWarnings("Convert2Lambda")
 public class DeleteDataBaseCheckAlertDialog extends DialogFragment {
 
     @Override

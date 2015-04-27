@@ -9,9 +9,7 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 import com.project.SYF.Main;
 
-/**
- * Created by mimmy on 26/04/15.
- */
+@SuppressWarnings("Convert2Lambda")
 public class ModifyAlertDialog extends DialogFragment {
 
     @Override
@@ -26,7 +24,7 @@ public class ModifyAlertDialog extends DialogFragment {
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        //LayoutInflater inflater = getActivity().getLayoutInflater();
         builder.setTitle("Entry modification ")
                 .setMessage("Modify the name of this entry ")
                 .setView(input)

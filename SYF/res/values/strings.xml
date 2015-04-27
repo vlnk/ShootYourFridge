@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SYF</string>
-    <string name="scan">Scan</string>
+    <string name="app_name">Shoot your fridge</string>
+    <string name="scan_button">Scan</string>
     <string name="add_button">Add</string>
     <string name="add_aliment">Add Aliment</string>
-    <string name="validate_button">Validate List</string>
+    <string name="validate_button">Let\'s find recipes !</string>
 
     <string name="scanlauncher_button">Scanner</string>
     <string name="favoris_button">Favoris</string>
@@ -12,6 +12,12 @@
 
     <string name="no_info_validate">Yes</string>
     <string name="no_info_cancel">No</string>
+    <string name="scanner">Fill your fridge</string>
+    <string name="favoris">Check your recipes</string>
+    <string name="description">Description:</string>
+    <string name="scan_result">Scan results Click to add</string>
+    <string name="aliment_name_view">Name: </string>
+    <string name="aliment_code">Code: </string>
 
     <string name="action_overflow">Naviguer</string>
     <string name="action_home">Home</string>

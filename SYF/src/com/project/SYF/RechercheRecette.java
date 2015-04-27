@@ -1,14 +1,13 @@
 package com.project.SYF;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuInflater;
+
 import android.view.View;
 import android.widget.*;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,25 +16,18 @@ import java.util.List;
 import android.content.Intent;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Food;
-import com.project.SYF.model.Recipe;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
-
 /**
  * Created by robinvermes on 25/04/2015.
  */
+@SuppressWarnings("Convert2Lambda")
 public class RechercheRecette extends ListActivity implements AdapterView.OnItemClickListener{
 
-    private ArrayList<String> mAlimentList = new ArrayList<String>();
+    @SuppressWarnings("unused")
     private ArrayAdapter<String> mAlimentListAdapter;
-    private ListView mRecetteListView;
 
     private ArrayList<HashMap<String, String>> recetteList;
 
@@ -52,11 +44,11 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
         setContentView(R.layout.rechercherecette);
 
         // populate list of ingredients with elements in FOOD table
-        mAlimentList = getAliments();
+        ArrayList<String> mAlimentList = getAliments();
 
         recetteList = new ArrayList<HashMap<String, String>>();
 
-        mRecetteListView = getListView();
+        ListView mRecetteListView = getListView();
 
         mRecetteListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -104,7 +96,7 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
         for(Element recette : recettes) {
             Element titreDiv = recette.getElementsByClass("m_titre_resultat").first();
 
-            Element lienTitre = null;
+            Element lienTitre;
             if((lienTitre = titreDiv.getElementsByTag("a").first()) == null)
                 continue;
             String titreHref  = lienTitre.attr("href");

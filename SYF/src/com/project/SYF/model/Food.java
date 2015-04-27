@@ -11,6 +11,7 @@ public class Food {
     // constructors
     public Food() {}
 
+    @SuppressWarnings("unused")
     public Food(String name) {
         this.name = name;
     }

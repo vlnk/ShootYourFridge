@@ -1,49 +1,41 @@
 package com.project.SYF;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.Context;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
+
 import android.view.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.*;
-import com.project.SYF.dialogs.DeleteCheckAlertDialog;
+import com.project.SYF.dialogs.ManualAlertDialog;
 import com.project.SYF.dialogs.ModifyDeleteAlertDialog;
+import com.project.SYF.dialogs.ScanAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Catalog;
 import com.project.SYF.model.Food;
 import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
 import android.content.Intent;
-import android.view.ViewGroup.LayoutParams;
-import android.view.View.OnClickListener;
-import org.json.JSONObject;
-
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Main extends Activity {
-    /**
-     * Called when the activity is first created.
-     */
-    private Button scanBtn, addBtn, validBtn;
-    private TextView formatTxt, contentTxt, resultsTxt;
-    private EditText addAlimentText;
-    private ListView mainListView, resultListView;
-    private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
+    private Button mValidButton;
 
-    private ArrayList<String> mNameList = new ArrayList<String>();
-    private ArrayList<String> mResultList = new ArrayList<String>();
+    public View mPopupView = null;
+    public PopupWindow mPopup;
+
+    public ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
+    public ArrayList<String> mNameList = new ArrayList<String>();
+
+    @SuppressWarnings("CanBeFinal")
+    public ArrayList<String> mResultList = new ArrayList<String>();
 
     private int positionToDelete;
     public String nameToModify;
@@ -51,8 +43,9 @@ public class Main extends Activity {
     private String mCurrentBarCode;
 
     // Database Helper
-    DatabaseHelper db;
+    private DatabaseHelper db;
 
+    @SuppressWarnings("Convert2Lambda")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,53 +56,9 @@ public class Main extends Activity {
         mNameList = getResults();
         initializeDb();
 
-        //Scan button
-        scanBtn = (Button)findViewById(R.id.scan_button);
-        formatTxt = (TextView)findViewById(R.id.scan_format);
-        contentTxt = (TextView)findViewById(R.id.scan_content);
-        scanBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        scan();
-                    }
-                });
-
-        //text result
-        resultsTxt = (TextView)findViewById(R.id.resultTextView);
-
-        //LIST RESULT
-        resultListView = (ListView) findViewById(R.id.list_proposal);
-        mArrayAdapterResult = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mResultList);
-        resultListView.setAdapter(mArrayAdapterResult);
-        resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pushAddButton(mResultList.get(position), true);
-            }
-        });
-
-        //ADD BUTTON
-        addBtn = (Button) findViewById(R.id.add_button);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        pushAddButton(addAlimentText.getText().toString(), false);
-                    }
-                });
-
-        //ADD ALIMENT BY TEXT
-        addAlimentText = (EditText) findViewById(R.id.add_aliment_text);
-        addAlimentText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addAlimentText.setText(addAlimentText.getText().toString());
-            }
-        });
-
         //ALIMENT LIST
-        mainListView = (ListView) findViewById(R.id.aliments_list);
-        mArrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                mNameList);
+        ListView mainListView = (ListView) findViewById(R.id.aliments_list);
+        mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
 
         // suppress element when long click on it
@@ -124,20 +73,21 @@ public class Main extends Activity {
                 nameToModify = mNameList.get(positionToDelete);
                 DialogFragment dialog = new ModifyDeleteAlertDialog();
                 dialog.show(getFragmentManager(), "tag");
-
-
                 return true;
             }
         });
 
-        //Validate Button
-        validBtn = (Button) findViewById(R.id.validate_button);
-        validBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        validate();
-                    }
-                });
+        //VALIDATE BUTTON
+        mValidButton = (Button) findViewById(R.id.validate_button);
+
+        if (mArrayAdapter.isEmpty()) {
+            mValidButton.setEnabled(false);
+            mValidButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            mValidButton.setEnabled(true);
+            mValidButton.setVisibility(View.VISIBLE);
+        }
     }
 
     /*
@@ -152,6 +102,11 @@ public class Main extends Activity {
         Toast mtoast = Toast.makeText(getApplicationContext(), "Ingredient " +
                 "deleted", Toast.LENGTH_SHORT);
         mtoast.show();
+
+        if (mArrayAdapter.isEmpty()){
+            mValidButton.setEnabled(false);
+            mValidButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     /*
@@ -183,7 +138,7 @@ public class Main extends Activity {
 
 
 
-    private void scan() {
+    public void scan(View view) {
         //scan + lancement recherche du produit (dans OnActivityResult)
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.initiateScan();
@@ -192,10 +147,83 @@ public class Main extends Activity {
     /**
      *  Launch the Recipe Search with the current list of ingredients
      * */
-    private void validate() {
+    public void validate(View view) {
         Intent validateIntent = new Intent(this, RechercheRecette.class);
         startActivity(validateIntent);
     }
+
+
+    /**
+     *  Launch the Dialog to add a new ingredient
+     * */
+    public void addPopup(View view) {
+        //DialogFragment dialog = new ScanAlertDialog();
+        //dialog.show(getFragmentManager(), "tag");
+
+        if (mPopupView == null) {
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mPopupView = inflater.inflate(R.layout.add_popup, null, false);
+
+            //LIST RESULT
+            ListView resultListView = (ListView) mPopupView.findViewById(R.id.list_proposal);
+            mArrayAdapterResult = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mResultList);
+            resultListView.setAdapter(mArrayAdapterResult);
+
+
+            resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    pushAddButton(mResultList.get(position), true);
+                }
+            });
+        }
+
+        mPopup = new PopupWindow(
+                mPopupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+        );
+
+        mPopup.setOutsideTouchable(true);
+        mPopup.showAtLocation(this.findViewById(R.id.main), Gravity.CENTER,
+                0, 0);
+    }
+
+    /*
+    public void addAliment(View view) {
+        EditText addAlimentText = (EditText) mPopupView.findViewById(R.id.add_aliment_text);
+        pushAddButton(addAlimentText.getText().toString(), false);
+        addAlimentText.setText("");
+
+        mPopup.dismiss();
+    }*/
+
+
+
+    /**
+     * Launch dialog to scan and add new ingredient
+     * */
+    public void addPopup_scan() {
+
+        DialogFragment dialog = new ScanAlertDialog();
+        dialog.show(getFragmentManager(), "tag");
+    }
+
+    /**
+     * Launch dialog to add new ingredient manually
+     * */
+    public void addPopup_manual() {
+        DialogFragment dialog = new ManualAlertDialog();
+        dialog.show(getFragmentManager(), "tag");
+    }
+
+    public void addPopup_manual(View view) {
+        addPopup_manual();
+    }
+
+
+
+
 
     /**
      * Add aliment to the current list, and to the database
@@ -207,9 +235,8 @@ public class Main extends Activity {
             boolean estdeja = false;
 
             // search for this value in the actual list of aliments
-            for (int i = 0; i < mNameList.size(); i++)
-            {
-                if (mNameList.get(i).compareTo(toListText) == 0)
+            for (String aMNameList : mNameList) {
+                if (aMNameList.compareTo(toListText) == 0)
                     estdeja = true;
             }
 
@@ -227,7 +254,9 @@ public class Main extends Activity {
                 db.addCatalog(newCatalog);
 
             }
-            addAlimentText.setText("");
+
+            mValidButton.setEnabled(true);
+            mValidButton.setVisibility(View.VISIBLE);
         }
 
     }
@@ -235,7 +264,14 @@ public class Main extends Activity {
     public void replaceAllInKeyWordsList(ArrayList<String> keywordsList){
         mResultList.clear();
         mResultList.addAll(keywordsList);
-        mArrayAdapterResult.notifyDataSetChanged();
+        //mArrayAdapterResult.notifyDataSetChanged();
+
+        if (mResultList.isEmpty()){
+            addPopup_manual();
+        }
+        else{
+            addPopup_scan();
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -258,14 +294,23 @@ public class Main extends Activity {
             String newAliment = db.getCatalogByScan(mCurrentBarCode);
 
             // if element exists in database
-            if (newAliment != null) {
-                mNameList.add(newAliment);
-            }
-            else {
+            //if (newAliment != null) {
+              //  mNameList.add(newAliment);
+            //}
+            //else {
                 // else, the element is searched on the Internet
                 AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
                 mTask.execute();
-            }
+                /*Toast mtoast = Toast.makeText(getApplicationContext(), "FAIL"
+                        , Toast.LENGTH_SHORT);
+                mtoast.show();*/
+            //}
+
+        }
+        else {
+            Toast mtoast = Toast.makeText(getApplicationContext(), "FAIL"
+                    , Toast.LENGTH_SHORT);
+            mtoast.show();
         }
     }
 
