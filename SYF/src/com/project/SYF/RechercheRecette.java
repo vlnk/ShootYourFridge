@@ -15,6 +15,7 @@ import java.util.List;
 import android.content.Intent;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Food;
+import com.project.SYF.model.Recipe;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -41,6 +42,7 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_HREF = "href";
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,12 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
         mRecetteListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent validateIntent = new Intent(RechercheRecette.this, AffichageRecette.class);
+                validateIntent.putExtra("name", recetteList.get(position).get(TAG_NAME));
+                validateIntent.putExtra("details", recetteList.get(position).get(TAG_DETAILS));
+                validateIntent.putExtra("description", recetteList.get(position).get(TAG_DESCRIPTION));
                 validateIntent.putExtra("href", recetteList.get(position).get(TAG_HREF));
+                validateIntent.putExtra("thereIsButton", "true");
+
                 startActivity(validateIntent);
             }
         });

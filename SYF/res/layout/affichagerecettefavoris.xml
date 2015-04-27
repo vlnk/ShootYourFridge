@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
         <ImageView
-            android:id="@+id/photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+                android:id="@+id/photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         <TextView
                 android:id="@+id/temps_preparation"
                 android:layout_width="fill_parent"
@@ -49,11 +48,5 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="2dip"
                 android:textColor="#acacac" />
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ajouter aux Favoris"
-                android:id="@+id/addtofavoris_button" android:layout_gravity="center_horizontal"/>
-
     </LinearLayout>
 </ScrollView>

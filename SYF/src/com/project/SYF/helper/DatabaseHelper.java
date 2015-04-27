@@ -327,19 +327,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // ------------------------ "Recipe" table methods ----------------//
 
     // Adding new element to RECIPE
-    public void addRecipe(Recipe rec) {
+    public boolean addRecipe(Recipe rec) {
+        boolean ret = isAlreadyIn(rec);
+        if (!ret){
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+
+            values.put(KEY_REC_NAME, rec.getName());
+            values.put(KEY_REC_DETAILS, rec.getDetails());
+            values.put(KEY_REC_DESCRIPTION, rec.getDescription());
+            values.put(KEY_REC_HREF, rec.getHref());
+
+            // Inserting Row
+            db.insert(TABLE_RECIPE, null, values);
+            db.close(); // Closing database connection
+        }
+
+        return ret;
+    }
+
+    // Removing 1 element by name from RECIPE
+    public void deleteRecipe(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECIPE, KEY_REC_NAME + " = ?", new String[]{name});
+        db.close();
+    }
 
-        ContentValues values = new ContentValues();
+    public boolean isAlreadyIn(Recipe rec){
+        boolean ret = false;
+        String nameToSearch = rec.getName();
+        List<Recipe> listRecipes = getAllInRecipe();
+        for (Recipe currentRec : listRecipes){
+            if (nameToSearch.compareTo(currentRec.getName()) == 0){
+                ret = true;
+            }
+        }
 
-        values.put(KEY_REC_NAME, rec.getName());
-        values.put(KEY_REC_DETAILS, rec.getDetails());
-        values.put(KEY_REC_DESCRIPTION, rec.getDescription());
-        values.put(KEY_REC_HREF, rec.getHref());
-
-        // Inserting Row
-        db.insert(TABLE_RECIPE, null, values);
-        db.close(); // Closing database connection
+        return ret;
     }
 
     // Getting All elements in RECIPE
