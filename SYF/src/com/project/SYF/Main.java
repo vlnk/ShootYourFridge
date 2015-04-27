@@ -154,6 +154,21 @@ public class Main extends Activity {
         db.deleteCatalog(name);
     }
 
+    public void modifyName(String modifiedName) {
+
+        String name = mNameList.get(positionToDelete);
+        Food aliment = db.getFoodByName(name);
+        db.updateAliment(aliment, modifiedName);
+        Catalog cat = db.getCatalogByName(name);
+        db.updateCatalog(cat, modifiedName);
+
+        mNameList.clear();
+        mNameList.addAll(getResults());
+        mArrayAdapter.notifyDataSetChanged();
+    }
+
+
+
     private void scan() {
         //scan + lancement recherche du produit (dans OnActivityResult)
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);

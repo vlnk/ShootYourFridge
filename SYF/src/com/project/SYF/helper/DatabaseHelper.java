@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
     // Database Name
     private static final String DATABASE_NAME = "foodManager";
 
@@ -150,7 +150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return foodList;
     }
 
-    // Getting single element in FOOD
+    // Getting single element in FOOD by scan ID
     public String getFoodByScan(String scan) {
         SQLiteDatabase db = this.getReadableDatabase();
         String name = null;
@@ -159,16 +159,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + KEY_SCAN_ID + " = " + scan;
 
         Log.e(LOG, selectQuery);
-
         Cursor c = db.rawQuery(selectQuery, null);
-
         if (c.moveToFirst())
-        {
             name = c.getString(c.getColumnIndex(KEY_NAME));
-        }
 
         return name;
     }
+
+    // Getting single element in FOOD by name
+    public Food getFoodByName(String nameToSearch) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+
+        String selectQuery = "SELECT  * FROM " + TABLE_FOODS + " WHERE "
+                + KEY_NAME + " = " + nameToSearch;
+
+        Log.e(LOG, selectQuery);
+        Cursor c = db.rawQuery("SELECT  * FROM " + TABLE_FOODS + " WHERE "
+                + KEY_NAME + " = ?", new String[] {nameToSearch});
+        if (c != null)
+            c.moveToFirst();
+
+        Food result = new Food();
+        result.setId(Integer.parseInt(c.getString(0)));
+        result.setScanId(c.getString(1));
+        result.setName(c.getString(2));
+
+        return result;
+    }
+
+    // Updating single FOOD element
+    public int updateAliment(Food fd, String newName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, newName);
+
+        // updating row
+        return db.update(TABLE_FOODS, values, KEY_ID + " = ?",
+                new String[] { String.valueOf(fd.getId()) });
+    }
+
 
 
 
@@ -245,6 +276,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             name = c.getString(c.getColumnIndex(KEY_CAT_NAME));
 
         return name;
+    }
+
+    // Updating single CATALOG element
+    public int updateCatalogElement(Catalog alimentToModify, String newName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CAT_NAME, newName);
+
+        // updating row
+        return db.update(TABLE_CATALOG, values, KEY_CAT_ID + " = ?",
+                new String[] { String.valueOf(alimentToModify.getId()) });
+    }
+
+
+    // Getting single element in CATALOG by name
+    public Catalog getCatalogByName(String nameToSearch) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Catalog result = new Catalog();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_CATALOG + " WHERE "
+                + KEY_CAT_NAME + " = " + nameToSearch;
+
+        Log.e(LOG, selectQuery);
+        Cursor c = db.rawQuery("SELECT  * FROM " + TABLE_CATALOG + " WHERE "
+                + KEY_CAT_NAME + " = ?", new String[] {nameToSearch});
+        if (c.moveToFirst())
+        {
+            result.setId(Integer.parseInt(c.getString(0)));
+            result.setScanId(c.getString(1));
+            result.setName(c.getString(2));
+        }
+        return result;
+    }
+
+    // Updating single CATALOG element
+    public int updateCatalog(Catalog cat, String newName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_CAT_NAME, newName);
+
+        // updating row
+        return db.update(TABLE_CATALOG, values, KEY_CAT_ID + " = ?",
+                new String[] { String.valueOf(cat.getId()) });
     }
 
 

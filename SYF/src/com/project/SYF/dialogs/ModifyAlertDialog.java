@@ -18,7 +18,7 @@ public class ModifyAlertDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 
-        Main callingActivity = (Main) getActivity();
+        final Main callingActivity = (Main) getActivity();
         final EditText input = new EditText(callingActivity);
 
         String originalName = callingActivity.nameToModify;
@@ -35,6 +35,13 @@ public class ModifyAlertDialog extends DialogFragment {
                         () {
                     public void onClick(DialogInterface dialog, int id) {
                         // confirm modification
+
+                        String value = input.getText().toString();
+
+                        if (value.compareTo("") != 0) {
+                            callingActivity.modifyName(value);
+                        }
+                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface
