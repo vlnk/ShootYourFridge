@@ -66,8 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Recipe table create statement
     private static final String CREATE_TABLE_RECIPE = "CREATE TABLE " +
             TABLE_RECIPE + "(" + KEY_REC_ID + " INTEGER PRIMARY KEY," +
-            KEY_REC_NAME + " TEXT," + KEY_REC_DETAILS + " TEXT" +
-            KEY_REC_DESCRIPTION + " TEXT" + KEY_REC_HREF + " TEXT" + ")";
+            KEY_REC_NAME + " TEXT," + KEY_REC_DETAILS + " TEXT," +
+            KEY_REC_DESCRIPTION + " TEXT," + KEY_REC_HREF + " TEXT" + ")";
 
     // Creating Table
     @Override
