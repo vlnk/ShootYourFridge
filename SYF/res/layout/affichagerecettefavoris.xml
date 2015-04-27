@@ -12,7 +12,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         <TextView
-                android:id="@+id/temps_preparation"
+                android:id="@+id/name"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2dip"
@@ -21,14 +21,21 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
         <TextView
+                android:id="@+id/temps_preparation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dip"
+                android:paddingTop="6dip"
+                android:textColor="#43bd00"
+                android:textSize="16sp" />
+        <TextView
                 android:id="@+id/temps_cuisson"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="2dip"
                 android:paddingTop="6dip"
                 android:textColor="#43bd00"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
         <TextView
                 android:id="@+id/ingredients"
                 android:layout_width="wrap_content"

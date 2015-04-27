@@ -33,6 +33,8 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
     private static TextView mIngredients;
     private static TextView mTitrePreparation;
     private static TextView mPreparation;
+    private static TextView mNameRecette;
+
 
     private static Recipe mCurrentRecipe;
 
@@ -47,11 +49,10 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         mRecipeHref  = intent.getStringExtra("href");
 
         mThereIsButton = intent.getStringExtra("thereIsButton");
+        mRecipeName  = intent.getStringExtra("name");
 
         if (mThereIsButton.compareTo("true") == 0) {
             setContentView(R.layout.affichagerecette);
-
-            mRecipeName  = intent.getStringExtra("name");
             mRecipeDetails  = intent.getStringExtra("details");
             mRecipeDescription  = intent.getStringExtra("description");
 
@@ -62,6 +63,8 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
             setContentView(R.layout.affichagerecettefavoris);
         }
 
+        mNameRecette = (TextView)findViewById(R.id.name);
+        mNameRecette.setText(mRecipeName);
         mTempsPrepa = (TextView)findViewById(R.id.temps_preparation);
         mTempsCuisson = (TextView)findViewById(R.id.temps_cuisson);
         mIngredients = (TextView)findViewById(R.id.ingredients);
