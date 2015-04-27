@@ -12,8 +12,8 @@
 
     <string name="no_info_validate">Yes</string>
     <string name="no_info_cancel">No</string>
-    <string name="scanner">Scanner</string>
-    <string name="favoris">Favoris</string>
+    <string name="scanner">Fill your fridge</string>
+    <string name="favoris">Check your recipes</string>
     <string name="description">Description:</string>
     <string name="scan_result">Scan results Click to add</string>
     <string name="aliment_name_view">Name: </string>

@@ -32,12 +32,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Main extends Activity {
     private Button mValidButton;
 
     private View mPopupView = null;
     private PopupWindow mPopup;
+    private ListView resultListView;
 
     private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
     private ArrayList<String> mNameList = new ArrayList<>();
@@ -67,30 +67,9 @@ public class Main extends Activity {
         //Scan button
         Button scanBtn = (Button) findViewById(R.id.scan_button);
 
-        //text result
-        resultsTxt = (TextView)findViewById(R.id.resultTextView);
-
-        //LIST RESULT
-        resultListView = (ListView) findViewById(R.id.list_proposal);
-        mArrayAdapterResult = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mResultList);
-        resultListView.setAdapter(mArrayAdapterResult);
-        resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pushAddButton(mResultList.get(position), true);
-            }
-        });
-
         //ADD BUTTON
         ImageButton addBtn = (ImageButton) findViewById(R.id.add_button);
 
-        //ADD ALIMENT BY TEXT
-        addAlimentText = (EditText) findViewById(R.id.add_aliment_text);
-        addAlimentText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addAlimentText.setText(addAlimentText.getText().toString());
-            }
-        });
 
         //ALIMENT LIST
         ListView mainListView = (ListView) findViewById(R.id.aliments_list);
@@ -106,46 +85,73 @@ public class Main extends Activity {
 
                 // Alert Dialog : Deletion Check
                 positionToDelete = position;
-                DialogFragment dialog = new DeleteCheckAlertDialog();
+                nameToModify = mNameList.get(positionToDelete);
+                DialogFragment dialog = new ModifyDeleteAlertDialog();
                 dialog.show(getFragmentManager(), "tag");
-
-
                 return true;
             }
         });
 
-        // modify element when simple click on it
-        mainListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String name = mNameList.get(position);
+        //VALIDATE BUTTON
+        mValidButton = (Button) findViewById(R.id.validate_button);
 
-            }
-        });
-
-        //Validate Button
-        validBtn = (Button) findViewById(R.id.validate_button);
-        validBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        validate();
-                    }
-                });
+        if (mArrayAdapter.isEmpty()) {
+            mValidButton.setEnabled(false);
+            mValidButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            mValidButton.setEnabled(true);
+            mValidButton.setVisibility(View.VISIBLE);
+        }
     }
 
+    /*
+     * Delete element from current list and FOOD table
+     */
     public void deleteElementCurrentList(){
         String name = mNameList.get(positionToDelete);
         db.deleteAliment(name);
 
         mNameList.remove(positionToDelete);
         mArrayAdapter.notifyDataSetChanged();
+        Toast mtoast = Toast.makeText(getApplicationContext(), "Ingredient " +
+                "deleted", Toast.LENGTH_SHORT);
+        mtoast.show();
+
+        if (mArrayAdapter.isEmpty()){
+            mValidButton.setEnabled(false);
+            mValidButton.setVisibility(View.INVISIBLE);
+        }
     }
 
+    /*
+     * Delete element from CATALOG table
+     */
     public void deleteElementDataBase() {
         String name = mNameList.get(positionToDelete);
         db.deleteCatalog(name);
     }
 
-    private void scan() {
+    /*
+     * Modify name in current list, FOOD and CATALOG table
+     */
+    public void modifyName(String modifiedName) {
+
+        String name = mNameList.get(positionToDelete);
+        Food aliment = db.getFoodByName(name);
+        db.updateAliment(aliment, modifiedName);
+        Catalog cat = db.getCatalogByName(name);
+        db.updateCatalog(cat, modifiedName);
+
+        mNameList.clear();
+        mNameList.addAll(getResults());
+        mArrayAdapter.notifyDataSetChanged();
+        Toast mtoast = Toast.makeText(getApplicationContext(), "Ingredient " +
+                "modified", Toast.LENGTH_SHORT);
+        mtoast.show();
+    }
+
+    public void scan(View view) {
         //scan + lancement recherche du produit (dans OnActivityResult)
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.initiateScan();
@@ -154,24 +160,59 @@ public class Main extends Activity {
     /**
      *  Launch the Recipe Search with the current list of ingredients
      * */
-    private void validate() {
+    public void validate(View view) {
         Intent validateIntent = new Intent(this, RechercheRecette.class);
         startActivity(validateIntent);
+    }
+
+    public void addPopup(View view) {
+        if (mPopupView == null) {
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mPopupView = inflater.inflate(R.layout.add_popup, null, false);
+
+            //LIST RESULT
+            resultListView = (ListView) mPopupView.findViewById(R.id.list_proposal);
+            mArrayAdapterResult = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mResultList);
+            resultListView.setAdapter(mArrayAdapterResult);
+
+            resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    pushAddButton(mResultList.get(position), true);
+                }
+            });
+        }
+
+        mPopup = new PopupWindow(
+                mPopupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+        );
+
+        mPopup.setOutsideTouchable(true);
+        mPopup.showAtLocation(this.findViewById(R.id.main), Gravity.CENTER, 0, 0);
+    }
+
+    public void addAliment(View view) {
+        EditText addAlimentText = (EditText) mPopupView.findViewById(R.id.add_aliment_text);
+        pushAddButton(addAlimentText.getText().toString(), false);
+        addAlimentText.setText("");
+
+        mPopup.dismiss();
     }
 
     /**
      * Add aliment to the current list, and to the database
      *      when button "Add" is pressed
      * */
-    public void pushAddButton(String toListText, boolean withBarCode){
+    private void pushAddButton(String toListText, boolean withBarCode){
         // if string not empty
         if ("".compareTo(toListText) != 0){
             boolean estdeja = false;
 
             // search for this value in the actual list of aliments
-            for (int i = 0; i < mNameList.size(); i++)
-            {
-                if (mNameList.get(i).compareTo(toListText) == 0)
+            for (String aMNameList : mNameList) {
+                if (aMNameList.compareTo(toListText) == 0)
                     estdeja = true;
             }
 
@@ -189,7 +230,9 @@ public class Main extends Activity {
                 db.addCatalog(newCatalog);
 
             }
-            addAlimentText.setText("");
+
+            mValidButton.setEnabled(true);
+            mValidButton.setVisibility(View.VISIBLE);
         }
 
     }
@@ -225,9 +268,18 @@ public class Main extends Activity {
             }
             else {
                 // else, the element is searched on the Internet
-                AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
-                mTask.execute();
+                //AsyncTaskClass mTask = new AsyncTaskClass(this, mCurrentBarCode);
+                //mTask.execute();
+                Toast mtoast = Toast.makeText(getApplicationContext(), "FAIL"
+                        , Toast.LENGTH_SHORT);
+                mtoast.show();
             }
+
+        }
+        else {
+            Toast mtoast = Toast.makeText(getApplicationContext(), "FAIL"
+            , Toast.LENGTH_SHORT);
+            mtoast.show();
         }
     }
 
@@ -243,7 +295,7 @@ public class Main extends Activity {
      *  Populate mNameList with the elements in the FOOD_TABLE
      */
     private ArrayList<String> getResults() {
-        ArrayList<String> resultList = new ArrayList<String>();
+        ArrayList<String> resultList = new ArrayList<>();
         DatabaseHelper db = new DatabaseHelper(this); //my database helper file
 
         List<Food> foodList = db.getAllInFood();

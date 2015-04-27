@@ -4,14 +4,21 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <Button
-            android:layout_width="wrap_content"
+    <Button android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+
+            android:background="@color/syf_red"
+
+            android:textColor="@android:color/white"
             android:text="@string/scanner"
-            android:id="@+id/scanlauncher_button" android:layout_gravity="center_horizontal"/>
-    <Button
-            android:layout_width="wrap_content"
+            android:id="@+id/scanlauncher_button"
+            android:layout_gravity="fill_horizontal"/>
+
+    <Button android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:background="@color/syf_yellow"
+            android:textColor="@android:color/black"
             android:text="@string/favoris"
-            android:id="@+id/favoris_button" android:layout_gravity="center_horizontal"/>
+            android:id="@+id/favoris_button"
+            android:layout_gravity="fill_horizontal"/>
 </LinearLayout>

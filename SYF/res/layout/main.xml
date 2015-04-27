@@ -10,7 +10,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
 
-            android:background="#FF465E"
+            android:background="@color/syf_red"
             android:text="@string/validate_button"
             android:textColor="@android:color/white"
             android:layout_gravity="bottom"

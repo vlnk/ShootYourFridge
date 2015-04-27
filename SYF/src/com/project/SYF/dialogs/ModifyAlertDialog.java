@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.widget.EditText;
 import com.project.SYF.Main;
 
-/**
- * Created by mimmy on 26/04/15.
- */
 public class ModifyAlertDialog extends DialogFragment {
 
     @Override

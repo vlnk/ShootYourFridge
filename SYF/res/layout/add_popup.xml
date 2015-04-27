@@ -17,6 +17,13 @@
                 android:id="@+id/scan_button"
                 android:onClick="scan"/>
 
+        <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/list_proposal">
+
+        </ListView>
+
         <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
