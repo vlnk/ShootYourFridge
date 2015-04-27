@@ -4,6 +4,8 @@ import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.*;
 import com.project.SYF.dialogs.DeleteCheckAlertDialog;
@@ -113,7 +115,14 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
     }
 
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu topMenu)
+    {
+        //inflate the menu to use in the action bar
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu,topMenu);
+        return super.onCreateOptionsMenu(topMenu);
+    }
 
 
 }

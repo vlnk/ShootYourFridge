@@ -3,6 +3,9 @@ package com.project.SYF;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -36,6 +39,26 @@ public class Home extends Activity implements View.OnClickListener{
         if(v.getId()==R.id.favoris_button){
             Intent validateIntent = new Intent(this, Favoris.class);
             startActivity(validateIntent);
+        }
+    }
+
+    @Override
+     public boolean onCreateOptionsMenu(Menu topMenu) {
+        //inflate the menu to use in the action bar
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu,topMenu);
+        return super.onCreateOptionsMenu(topMenu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_home:
+            case R.id.action_scanner: Intent validateIntent = new Intent(this, Main.class);
+                                    startActivity(validateIntent);
+            default:
+
+            return super.onOptionsItemSelected(item);
         }
     }
 }

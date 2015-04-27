@@ -10,7 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.*;
 import android.widget.*;
 import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.dialogs.ModifyDeleteAlertDialog;
@@ -20,7 +20,6 @@ import com.project.SYF.model.Food;
 import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
 import android.content.Intent;
-import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.View.OnClickListener;
 import org.json.JSONObject;
@@ -314,6 +313,26 @@ public class Main extends Activity {
                     "Scan Id: " + cn.getScanId();
             // Writing Contacts to log
             Log.d("Name: ", log);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu topMenu)
+    {
+        //inflate the menu to use in the action bar
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu,topMenu);
+        return super.onCreateOptionsMenu(topMenu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_home: finish();
+            case R.id.action_scanner:
+            default:
+
+            return super.onOptionsItemSelected(item);
         }
     }
 }

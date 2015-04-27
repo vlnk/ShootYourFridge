@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.*;
 import android.widget.ListView;
@@ -87,7 +89,7 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
         for (int i = 0; i < foodList.size(); i++) {
             aliment = foodList.get(i).getName();
             aliment = aliment.replace(' ', '-');
-            
+
             resultList.add(i, aliment);
         }
         return resultList;
@@ -142,5 +144,14 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu topMenu)
+    {
+        //inflate the menu to use in the action bar
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu,topMenu);
+        return super.onCreateOptionsMenu(topMenu);
     }
 }
