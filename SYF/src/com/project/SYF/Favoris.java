@@ -1,10 +1,13 @@
 package com.project.SYF;
 
+import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import com.project.SYF.dialogs.DeleteCheckAlertDialog;
+import com.project.SYF.dialogs.DeleteFavorisCheckAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Recipe;
 import org.jsoup.nodes.Document;
@@ -22,14 +25,15 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
 
     private ArrayList<HashMap<String, String>> recetteList;
 
-    private ArrayAdapter<String> mAlimentListAdapter;
     private ListView mRecetteListView;
+    private ListAdapter adapter;
 
     private static final String TAG_NAME = "name";
     private static final String TAG_DETAILS = "details";
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_HREF = "href";
 
+    private int positionToDelete;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,23 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
                 startActivity(validateIntent);
             }
         });
+        mRecetteListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int
+                    position, long id) {
 
-        ListAdapter adapter = new SimpleAdapter(
+                // Alert Dialog : Deletion Check
+                positionToDelete = position;
+                DialogFragment dialog = new DeleteFavorisCheckAlertDialog();
+                dialog.show(getFragmentManager(), "tag");
+
+
+                return true;
+            }
+        });
+
+
+        adapter = new SimpleAdapter(
                 Favoris.this, recetteList,
                 R.layout.recette, new String[] { TAG_NAME, TAG_DETAILS,
                 TAG_DESCRIPTION }, new int[] { R.id.name,
@@ -76,6 +95,16 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
 
             recetteList.add(uneRecette);
         }
+    }
+
+    public void deleteElementCurrentList(){
+        DatabaseHelper db = new DatabaseHelper(this);
+        HashMap<String, String> uneRecette = new HashMap<String, String>();
+        uneRecette = recetteList.get(positionToDelete);
+        db.deleteRecipe(uneRecette.get(TAG_NAME));
+
+        recetteList.remove(positionToDelete);
+        setListAdapter(adapter);
     }
 
     @Override

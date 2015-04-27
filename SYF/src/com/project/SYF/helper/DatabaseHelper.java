@@ -266,6 +266,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+    // Removing 1 element by name from RECIPE
+    public void deleteRecipe(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_RECIPE, KEY_REC_NAME + " = ?", new String[]{name});
+        db.close();
+    }
+
     // Getting All elements in RECIPE
     public List<Recipe> getAllInRecipe() {
         List<Recipe> recipeList = new ArrayList<Recipe>();
