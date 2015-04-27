@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="syf_blue_dark">#44537C</color>
+    <color name="syf_blue_light">#13A7FF</color>
+    <color name="syf_red">#D14554</color>
+    <color name="syf_yellow">#FFED66</color>
+    <color name="syf_green">#06E849</color>
+</resources>

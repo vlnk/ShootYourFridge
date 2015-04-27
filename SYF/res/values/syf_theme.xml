@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="syf_theme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/syf_actionBar</item>
+    </style>
+
+    <style name="syf_actionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/syf_blue_dark</item>
+    </style>
+
+    <style name="syf_bottomBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:alpha">1</item>
+        <item name="android:background">@android:color/white</item>
+    </style>
+</resources>

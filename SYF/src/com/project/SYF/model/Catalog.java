@@ -1,12 +1,9 @@
 package com.project.SYF.model;
 
-/**
- * Created by mimmy on 26/04/15.
- */
 public class Catalog {
-    int     id;
-    String  scanID;
-    String  name;
+    private int     id;
+    private String  scanID;
+    private String  name;
 
     // constructors
     public Catalog() {

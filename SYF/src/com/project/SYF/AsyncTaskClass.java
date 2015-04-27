@@ -106,18 +106,13 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
 
             Element aliments = document.getElementsByClass("data").first();
 
-            try {
-                content = aliments.text();
-                idx1 = content.indexOf("Description ") + 12;
-                idx2 = content.indexOf("Size/Weight");
-                content = content.substring(idx1, idx2);
-                res = content.split(" ");
-                for (int i = 0; i < res.length; i++) {
-                    keywordsList.add(i, res[i]);
-                }
-            }
-            catch (NullPointerException e) {
-                e.printStackTrace();
+            content = aliments.text();
+            idx1 = content.indexOf("Description ") + 12;
+            idx2 = content.indexOf("Size/Weight");
+            content = content.substring(idx1, idx2);
+            res = content.split(" ");
+            for (int i = 0; i < res.length; i++) {
+                keywordsList.add(i, res[i]);
             }
         }
     }

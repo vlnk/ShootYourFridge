@@ -3,74 +3,38 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
-        >
-    <RelativeLayout
+              android:id="@+id/main">
+
+    <Button
+            android:id="@+id/validate_button"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+
+            android:background="#FF465E"
+            android:text="@string/validate_button"
+            android:textColor="@android:color/white"
+            android:layout_gravity="bottom"
+
+            android:onClick="validate"/>
+
+    <ListView
+            android:id="@+id/aliments_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        <Button android:id="@+id/scan_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="@string/scan" />
-        <TextView
-                android:id="@+id/scan_format"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textIsSelectable="true"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/scan_button" />
-        <TextView
-                android:id="@+id/scan_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textIsSelectable="true"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/scan_format" />
-        <TextView
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:layout_marginTop="60dp"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:text="Scan results Click to add"
-                android:id="@+id/resultTextView" android:textAlignment="center"/>
-        <ListView
-                android:id="@+id/list_proposal"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginLeft="130dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="60dp"/>
-        <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="170dp"
-                android:layout_marginLeft="30dp"
-                android:orientation="horizontal">
-            <EditText
-                    android:id="@+id/add_aliment_text"
-                    android:layout_width="260dp"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/add_aliment" />
-            <Button
-                    android:id="@+id/add_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_button" />
-        </LinearLayout>
-        <ListView
-                android:id="@+id/aliments_list"
-                android:layout_width="match_parent"
-                android:layout_height="230dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="220dp"/>
-        <Button
-                android:id="@+id/validate_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="460dp"
-                android:text="@string/validate_button" android:layout_marginBottom="0dp"/>
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:gravity="bottom|end"
+                  android:layout_weight="1">
+
+        <ImageButton android:id="@+id/add_button"
+                     android:layout_width="50dp"
+                     android:layout_height="50dp"
+                     android:src="@drawable/ic_add_black_48dp"
+                     android:background="@drawable/add_button_selector"
+                     android:onClick="addPopup"/>
+
+    </LinearLayout>
 </LinearLayout>
 

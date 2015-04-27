@@ -2,8 +2,12 @@ package com.project.SYF;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.*;
 import com.project.SYF.dialogs.DeleteCheckAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
@@ -18,7 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Activity {
-    private EditText addAlimentText;
+    private Button mValidButton;
+
+    private View mPopupView = null;
+    private PopupWindow mPopup;
+
     private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
     private ArrayList<String> mNameList = new ArrayList<>();
 
@@ -46,50 +54,8 @@ public class Main extends Activity {
         //Scan button
         Button scanBtn = (Button) findViewById(R.id.scan_button);
 
-        //text result
-        @SuppressWarnings("UnusedAssignment")
-        TextView resultsTxt = (TextView) findViewById(R.id.resultTextView);
-
-        @SuppressWarnings("UnusedAssignment")
-        TextView formatTxt = (TextView) findViewById(R.id.scan_format);
-
-        @SuppressWarnings("UnusedAssignment")
-        TextView contentTxt = (TextView) findViewById(R.id.scan_content);
-
-        scanBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scan();
-            }
-        });
-
-        //LIST RESULT
-        ListView resultListView = (ListView) findViewById(R.id.list_proposal);
-        mArrayAdapterResult = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mResultList);
-        resultListView.setAdapter(mArrayAdapterResult);
-        resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                pushAddButton(mResultList.get(position), true);
-            }
-        });
-
         //ADD BUTTON
-        Button addBtn = (Button) findViewById(R.id.add_button);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pushAddButton(addAlimentText.getText().toString(), false);
-            }
-        });
-
-        //ADD ALIMENT BY TEXT
-        addAlimentText = (EditText) findViewById(R.id.add_aliment_text);
-        addAlimentText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addAlimentText.setText(addAlimentText.getText().toString());
-            }
-        });
+        ImageButton addBtn = (ImageButton) findViewById(R.id.add_button);
 
         //ALIMENT LIST
         ListView mainListView = (ListView) findViewById(R.id.aliments_list);
@@ -113,8 +79,6 @@ public class Main extends Activity {
             }
         });
 
-        //VALIDATE BUTTON
-        Button validBtn = (Button) findViewById(R.id.validate_button);
         // modify element when simple click on it
         mainListView.setOnItemClickListener(new ListView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -123,14 +87,17 @@ public class Main extends Activity {
             }
         });
 
-        //Validate Button
-        validBtn = (Button) findViewById(R.id.validate_button);
-        validBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validate();
-            }
-        });
+        //VALIDATE BUTTON
+        mValidButton = (Button) findViewById(R.id.validate_button);
+
+        if (mArrayAdapter.isEmpty()) {
+            mValidButton.setEnabled(false);
+            mValidButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            mValidButton.setEnabled(true);
+            mValidButton.setVisibility(View.VISIBLE);
+        }
     }
 
     public void deleteElementCurrentList(){
@@ -139,6 +106,11 @@ public class Main extends Activity {
 
         mNameList.remove(positionToDelete);
         mArrayAdapter.notifyDataSetChanged();
+
+        if (mArrayAdapter.isEmpty()) {
+            mValidButton.setVisibility(View.INVISIBLE);
+            mValidButton.setEnabled(false);
+        }
     }
 
     public void deleteElementDataBase() {
@@ -146,7 +118,7 @@ public class Main extends Activity {
         db.deleteCatalog(name);
     }
 
-    private void scan() {
+    public void scan(View view) {
         //scan + lancement recherche du produit (dans OnActivityResult)
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
         scanIntegrator.initiateScan();
@@ -155,9 +127,39 @@ public class Main extends Activity {
     /**
      *  Launch the Recipe Search with the current list of ingredients
      * */
-    private void validate() {
+    public void validate(View view) {
         Intent validateIntent = new Intent(this, RechercheRecette.class);
         startActivity(validateIntent);
+    }
+
+    public void addPopup(View view) {
+        if (mPopupView == null) {
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mPopupView = inflater.inflate(R.layout.add_popup, null, false);
+        }
+
+        mPopup = new PopupWindow(
+                mPopupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                true
+        );
+
+        EditText editableName = (EditText)mPopupView.findViewById(R.id.add_aliment_text);
+        editableName.setText("");
+
+        mPopup.setOutsideTouchable(true);
+        mPopup.showAtLocation(this.findViewById(R.id.main), Gravity.CENTER, 0, 0);
+
+        //EditText addAlimentText = (EditText) findViewById(R.id.add_aliment_text);
+        //addAlimentText.setText("");
+    }
+
+    public void addAliment(View view) {
+        EditText addAlimentText = (EditText) mPopupView.findViewById(R.id.add_aliment_text);
+        pushAddButton(addAlimentText.getText().toString(), false);
+
+        mPopup.dismiss();
     }
 
     /**
@@ -189,7 +191,9 @@ public class Main extends Activity {
                 db.addCatalog(newCatalog);
 
             }
-            addAlimentText.setText("");
+
+            mValidButton.setEnabled(true);
+            mValidButton.setVisibility(View.VISIBLE);
         }
 
     }

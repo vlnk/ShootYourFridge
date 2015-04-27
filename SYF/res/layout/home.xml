@@ -7,11 +7,11 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Scanner"
+            android:text="@string/scanner"
             android:id="@+id/scanlauncher_button" android:layout_gravity="center_horizontal"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Favoris"
+            android:text="@string/favoris"
             android:id="@+id/favoris_button" android:layout_gravity="center_horizontal"/>
 </LinearLayout>

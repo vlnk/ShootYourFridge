@@ -13,9 +13,6 @@ import com.project.SYF.model.Recipe;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by mimmy on 25/04/15.
- */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Logcat tag
@@ -111,6 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Removing 1 element from FOOD
+    @SuppressWarnings("unused")
     public void deleteAliment(Food food) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_FOODS, KEY_ID + " = ?",
@@ -127,7 +125,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in FOOD
     public List<Food> getAllInFood() {
-        List<Food> foodList = new ArrayList<Food>();
+        List<Food> foodList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_FOODS;
 
@@ -151,6 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Getting single element in FOOD
+    @SuppressWarnings("unused")
     public String getFoodByScan(String scan) {
         SQLiteDatabase db = this.getReadableDatabase();
         String name = null;
@@ -190,6 +189,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Removing 1 element from CATALOG
+    @SuppressWarnings("unused")
     public void deleteCatalog(Catalog cat) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CATALOG, KEY_CAT_ID + " = ?",
@@ -207,7 +207,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in CATALOG
     public List<Catalog> getAllInCatalog() {
-        List<Catalog> catList = new ArrayList<Catalog>();
+        List<Catalog> catList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_CATALOG;
 
@@ -251,6 +251,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // ------------------------ "Recipe" table methods ----------------//
 
     // Adding new element to RECIPE
+    @SuppressWarnings("unused")
     public void addRecipe(Recipe rec) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -267,8 +268,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Getting All elements in RECIPE
+    @SuppressWarnings("unused")
     public List<Recipe> getAllInRecipe() {
-        List<Recipe> recipeList = new ArrayList<Recipe>();
+        List<Recipe> recipeList = new ArrayList<>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_RECIPE;
 
@@ -295,6 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // Getting single recipe by name
+    @SuppressWarnings("unused")
     public String getRecipeByName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
 
