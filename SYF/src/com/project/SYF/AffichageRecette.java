@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -65,6 +67,15 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         int idx = duree.indexOf("Temps de cuisson");
         String preparation = duree.substring(0, idx);
         String cuisson = duree.substring(idx);
+
+        Element recettePhoto = document.getElementsByClass("photo").first();
+        URL photoUrl;
+        try {
+            photoUrl = new URL(recettePhoto.attr("src"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e("Image load fail", "Couldn't load image from URL" + e.toString());
+        }
 
         ingredients = ingredients.replace("- ", "\n- ");
 
