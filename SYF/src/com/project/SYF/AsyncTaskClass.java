@@ -45,7 +45,7 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     @SuppressWarnings("unused")
     private static final String TAG_KEYWORDS = "_keywords";
 
-    private final ArrayList<String> keywordsList = new ArrayList<>();
+    private final ArrayList<String> keywordsList = new ArrayList<String>();
     private boolean mNoValueFromProduct;
 
     private Document document;
@@ -53,7 +53,7 @@ public class AsyncTaskClass extends AsyncTask<Void, Integer, Boolean> {
     @SuppressWarnings("unused")
     public AsyncTaskClass(Activity mainActivity, String urlEndString) {
         super();
-        this.mActivity = new WeakReference<>((Main) mainActivity);
+        this.mActivity = new WeakReference<Main>((Main) mainActivity);
         this.mUrlString = urlEndString;
         mNoValueFromProduct = false;
     }

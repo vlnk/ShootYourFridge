@@ -20,7 +20,7 @@ class AsyncGetRecette extends AsyncTask<Void, Integer, Boolean> {
 
     public AsyncGetRecette(Activity rechercheActivity, String urlString) {
         super();
-        this.mActivity = new WeakReference<>((AffichageRecette) rechercheActivity);
+        this.mActivity = new WeakReference<AffichageRecette>((AffichageRecette) rechercheActivity);
         mUrlString = urlString;
     }
 

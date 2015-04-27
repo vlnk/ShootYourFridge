@@ -128,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in FOOD
     public List<Food> getAllInFood() {
-        List<Food> foodList = new ArrayList<>();
+        List<Food> foodList = new ArrayList<Food>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_FOODS;
 
@@ -243,7 +243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in CATALOG
     public List<Catalog> getAllInCatalog() {
-        List<Catalog> catList = new ArrayList<>();
+        List<Catalog> catList = new ArrayList<Catalog>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_CATALOG;
 
@@ -378,7 +378,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Getting All elements in RECIPE
     public List<Recipe> getAllInRecipe() {
-        List<Recipe> recipeList = new ArrayList<>();
+        List<Recipe> recipeList = new ArrayList<Recipe>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_RECIPE;
 

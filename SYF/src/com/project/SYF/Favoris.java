@@ -38,7 +38,7 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
         setContentView(R.layout.rechercherecette);
 
         //recuperation depuis la BD A FAIRE
-        recetteList = new ArrayList<>();
+        recetteList = new ArrayList<HashMap<String, String>>();
         getRecipes();
 
         ListView mRecetteListView = getListView();
@@ -83,7 +83,7 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
         List<Recipe> recipeList = db.getAllInRecipe();
 
         for (Recipe currentRecipe : recipeList){
-            HashMap<String, String> uneRecette = new HashMap<>();
+            HashMap<String, String> uneRecette = new HashMap<String, String>();
             uneRecette.put(TAG_NAME, currentRecipe.getName());
             uneRecette.put(TAG_DETAILS, currentRecipe.getDetails());
             uneRecette.put(TAG_DESCRIPTION, currentRecipe.getDescription());

@@ -22,11 +22,11 @@ public class AsyncRechercheRecettes extends AsyncTask<Void, Integer, Boolean> {
 
     private Document document;
 
-    private ArrayList<String> mAlimentList = new ArrayList<>();
+    private ArrayList<String> mAlimentList = new ArrayList<String>();
 
     public AsyncRechercheRecettes(Activity rechercheActivity, ArrayList<String> alimentList) {
         super();
-        this.mActivity = new WeakReference<>((RechercheRecette) rechercheActivity);
+        this.mActivity = new WeakReference<RechercheRecette>((RechercheRecette) rechercheActivity);
         this.mAlimentList = alimentList;
         mUrlString = url1 + createURL() + url2;
     }

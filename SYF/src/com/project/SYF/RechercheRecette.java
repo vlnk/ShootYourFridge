@@ -42,7 +42,7 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
         // populate list of ingredients with elements in FOOD table
         ArrayList<String> mAlimentList = getAliments();
 
-        recetteList = new ArrayList<>();
+        recetteList = new ArrayList<HashMap<String, String>>();
 
         ListView mRecetteListView = getListView();
 
@@ -68,7 +68,7 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
      * Get list of aliments in FOOD table
      */
     private ArrayList<String> getAliments() {
-        ArrayList<String> resultList = new ArrayList<>();
+        ArrayList<String> resultList = new ArrayList<String>();
         DatabaseHelper db = new DatabaseHelper(this); //my database helper file
         String aliment;
 
@@ -105,7 +105,7 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
             String description = descriptionDiv.text();
 
             // tmp hashmap for single contact
-            HashMap<String, String> uneRecette = new HashMap<>();
+            HashMap<String, String> uneRecette = new HashMap<String, String>();
 
 
             // adding each child node to HashMap key => value

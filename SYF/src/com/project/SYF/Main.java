@@ -29,10 +29,10 @@ public class Main extends Activity {
     private PopupWindow mPopup;
 
     private ArrayAdapter<String> mArrayAdapter, mArrayAdapterResult;
-    private ArrayList<String> mNameList = new ArrayList<>();
+    private ArrayList<String> mNameList = new ArrayList<String>();
 
     @SuppressWarnings("CanBeFinal")
-    private ArrayList<String> mResultList = new ArrayList<>();
+    private ArrayList<String> mResultList = new ArrayList<String>();
 
     private int positionToDelete;
     public String nameToModify;
@@ -55,7 +55,7 @@ public class Main extends Activity {
 
         //ALIMENT LIST
         ListView mainListView = (ListView) findViewById(R.id.aliments_list);
-        mArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mNameList);
+        mArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mNameList);
         mainListView.setAdapter(mArrayAdapter);
 
         // suppress element when long click on it
@@ -154,7 +154,7 @@ public class Main extends Activity {
 
             //LIST RESULT
             ListView resultListView = (ListView) mPopupView.findViewById(R.id.list_proposal);
-            mArrayAdapterResult = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, mResultList);
+            mArrayAdapterResult = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mResultList);
             resultListView.setAdapter(mArrayAdapterResult);
 
             resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
@@ -260,7 +260,7 @@ public class Main extends Activity {
         }
         else {
             Toast mtoast = Toast.makeText(getApplicationContext(), "FAIL"
-            , Toast.LENGTH_SHORT);
+                    , Toast.LENGTH_SHORT);
             mtoast.show();
         }
     }
@@ -277,7 +277,7 @@ public class Main extends Activity {
      *  Populate mNameList with the elements in the FOOD_TABLE
      */
     private ArrayList<String> getResults() {
-        ArrayList<String> resultList = new ArrayList<>();
+        ArrayList<String> resultList = new ArrayList<String>();
         DatabaseHelper db = new DatabaseHelper(this); //my database helper file
 
         List<Food> foodList = db.getAllInFood();
