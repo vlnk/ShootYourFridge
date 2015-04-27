@@ -92,7 +92,7 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         String photoUrl = recettePhoto.attr("src");
 
         ImageView imageView = (ImageView) findViewById(R.id.photo);
-        Picasso.with(this).load("http://i.imgur.com/DvpvklR.png").into(imageView);
+        Picasso.with(this).load(photoUrl).into(imageView);
 
         ingredients = ingredients.replace("- ", "\n- ");
 
