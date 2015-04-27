@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.*;
 import com.project.SYF.dialogs.DeleteCheckAlertDialog;
+import com.project.SYF.dialogs.ModifyDeleteAlertDialog;
 import com.project.SYF.helper.DatabaseHelper;
 import com.project.SYF.model.Catalog;
 import com.project.SYF.model.Food;
@@ -46,6 +47,7 @@ public class Main extends Activity {
     private ArrayList<String> mResultList = new ArrayList<String>();
 
     private int positionToDelete;
+    public String nameToModify;
 
     private String mCurrentBarCode;
 
@@ -120,19 +122,12 @@ public class Main extends Activity {
 
                 // Alert Dialog : Deletion Check
                 positionToDelete = position;
-                DialogFragment dialog = new DeleteCheckAlertDialog();
+                nameToModify = mNameList.get(positionToDelete);
+                DialogFragment dialog = new ModifyDeleteAlertDialog();
                 dialog.show(getFragmentManager(), "tag");
 
 
                 return true;
-            }
-        });
-
-        // modify element when simple click on it
-        mainListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String name = mNameList.get(position);
-
             }
         });
 
@@ -158,6 +153,21 @@ public class Main extends Activity {
         String name = mNameList.get(positionToDelete);
         db.deleteCatalog(name);
     }
+
+    public void modifyName(String modifiedName) {
+
+        String name = mNameList.get(positionToDelete);
+        Food aliment = db.getFoodByName(name);
+        db.updateAliment(aliment, modifiedName);
+        Catalog cat = db.getCatalogByName(name);
+        db.updateCatalog(cat, modifiedName);
+
+        mNameList.clear();
+        mNameList.addAll(getResults());
+        mArrayAdapter.notifyDataSetChanged();
+    }
+
+
 
     private void scan() {
         //scan + lancement recherche du produit (dans OnActivityResult)
