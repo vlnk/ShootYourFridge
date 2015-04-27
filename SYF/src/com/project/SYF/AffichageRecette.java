@@ -12,6 +12,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.project.SYF.helper.DatabaseHelper;
+import com.project.SYF.model.Recipe;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -20,23 +22,44 @@ import org.jsoup.nodes.Element;
  */
 public class AffichageRecette extends Activity implements View.OnClickListener{
 
-    private static String mHref;
+    private static String mRecipeHref;
+    private static String mRecipeName;
+    private static String mRecipeDetails;
+    private static String mRecipeDescription;
+
     private static TextView mTempsPrepa;
     private static TextView mTempsCuisson;
     private static TextView mIngredients;
     private static TextView mTitrePreparation;
     private static TextView mPreparation;
 
+    private static Recipe mCurrentRecipe;
+
     private Button mAddToFavorisBtn;
+    private String mThereIsButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.affichagerecette);
-
         Intent intent = getIntent();
-        mHref = intent.getStringExtra("href");
+        mRecipeHref  = intent.getStringExtra("href");
+
+        mThereIsButton = intent.getStringExtra("thereIsButton");
+
+        if (mThereIsButton.compareTo("true") == 0) {
+            setContentView(R.layout.affichagerecette);
+
+            mRecipeName  = intent.getStringExtra("name");
+            mRecipeDetails  = intent.getStringExtra("details");
+            mRecipeDescription  = intent.getStringExtra("description");
+
+            mAddToFavorisBtn = (Button) findViewById(R.id.addtofavoris_button);
+            mAddToFavorisBtn.setOnClickListener(this);
+        }
+        else{
+            setContentView(R.layout.affichagerecettefavoris);
+        }
 
         mTempsPrepa = (TextView)findViewById(R.id.temps_preparation);
         mTempsCuisson = (TextView)findViewById(R.id.temps_cuisson);
@@ -44,11 +67,7 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         mTitrePreparation = (TextView)findViewById(R.id.titre_preparation);
         mPreparation =  (TextView)findViewById(R.id.preparation);
 
-        mAddToFavorisBtn = (Button)findViewById(R.id.addtofavoris_button);
-
-        mAddToFavorisBtn.setOnClickListener(this);
-
-        AsyncGetRecette mTask = new AsyncGetRecette(this, mHref);
+        AsyncGetRecette mTask = new AsyncGetRecette(this, mRecipeHref);
         mTask.execute();
 
     }
@@ -94,6 +113,11 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        //ajouter la recette aux favoris
+        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        Recipe thisRecipe = new Recipe(mRecipeName, mRecipeDetails, mRecipeDescription, mRecipeHref);
+        db.addRecipe(thisRecipe);
+
+        Toast mtoast = Toast.makeText(getApplicationContext(), "Enregistrement effectué", Toast.LENGTH_SHORT);
+        mtoast.show();
     }
 }
