@@ -42,6 +42,7 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
     private static final String TAG_DESCRIPTION = "description";
     private static final String TAG_HREF = "href";
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,7 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
                 validateIntent.putExtra("details", recetteList.get(position).get(TAG_DETAILS));
                 validateIntent.putExtra("description", recetteList.get(position).get(TAG_DESCRIPTION));
                 validateIntent.putExtra("href", recetteList.get(position).get(TAG_HREF));
+                validateIntent.putExtra("thereIsButton", "true");
 
                 startActivity(validateIntent);
             }

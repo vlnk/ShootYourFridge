@@ -34,28 +34,36 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
     private static Recipe mCurrentRecipe;
 
     private Button mAddToFavorisBtn;
+    private String mThereIsButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.affichagerecette);
-
         Intent intent = getIntent();
         mRecipeHref  = intent.getStringExtra("href");
-        mRecipeName  = intent.getStringExtra("name");
-        mRecipeDetails  = intent.getStringExtra("details");
-        mRecipeDescription  = intent.getStringExtra("description");
+
+        mThereIsButton = intent.getStringExtra("thereIsButton");
+
+        if (mThereIsButton.compareTo("true") == 0) {
+            setContentView(R.layout.affichagerecette);
+
+            mRecipeName  = intent.getStringExtra("name");
+            mRecipeDetails  = intent.getStringExtra("details");
+            mRecipeDescription  = intent.getStringExtra("description");
+
+            mAddToFavorisBtn = (Button) findViewById(R.id.addtofavoris_button);
+            mAddToFavorisBtn.setOnClickListener(this);
+        }
+        else{
+            setContentView(R.layout.affichagerecettefavoris);
+        }
 
         mTempsPrepa = (TextView)findViewById(R.id.temps_preparation);
         mTempsCuisson = (TextView)findViewById(R.id.temps_cuisson);
         mIngredients = (TextView)findViewById(R.id.ingredients);
         mTitrePreparation = (TextView)findViewById(R.id.titre_preparation);
         mPreparation =  (TextView)findViewById(R.id.preparation);
-
-        mAddToFavorisBtn = (Button)findViewById(R.id.addtofavoris_button);
-
-        mAddToFavorisBtn.setOnClickListener(this);
 
         AsyncGetRecette mTask = new AsyncGetRecette(this, mRecipeHref);
         mTask.execute();
@@ -97,5 +105,8 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
         Recipe thisRecipe = new Recipe(mRecipeName, mRecipeDetails, mRecipeDescription, mRecipeHref);
         db.addRecipe(thisRecipe);
+
+        Toast mtoast = Toast.makeText(getApplicationContext(), "Enregistrement effectué", Toast.LENGTH_SHORT);
+        mtoast.show();
     }
 }
