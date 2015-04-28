@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_margin="20dp">
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dp"
+                  android:layout_marginRight="10dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="name: "/>
+
+        <EditText android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="fill_horizontal"
+                  android:id="@+id/add_aliment_manual"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginLeft="10dp"
+                  android:layout_marginRight="10dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="code: "/>
+
+        <EditText android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="fill_horizontal"/>
+    </LinearLayout>
+
+    <Button android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:text="@string/add_aliment"
+            android:gravity="center_horizontal|center_vertical"
+            android:background="@color/syf_yellow"
+            android:textSize="20sp"
+            android:id="@+id/add_aliment_manual_btn"/>
+</LinearLayout>

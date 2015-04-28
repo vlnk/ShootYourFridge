@@ -58,8 +58,6 @@ public class ScanAlertDialog extends DialogFragment {
             }
         });
 
-        builder.setView(list);
-
         return builder.create();
     }
 }
