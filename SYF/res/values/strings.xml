@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Shoot your fridge</string>
-    <string name="scan_button">Scan</string>
+
+    <string name="scan_popup_title">Scanning results</string>
+    <string name="scan_popup_message">Choose in the list below the best description for your product, by clicking on it.</string>
+
     <string name="add_button">Add</string>
     <string name="add_aliment">Add Aliment</string>
     <string name="validate_button">Let\'s find recipes !</string>

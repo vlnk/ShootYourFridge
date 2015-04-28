@@ -136,8 +136,6 @@ public class Main extends Activity {
         mtoast.show();
     }
 
-
-
     public void scan(View view) {
         //scan + lancement recherche du produit (dans OnActivityResult)
         IntentIntegrator scanIntegrator = new IntentIntegrator(this);
@@ -151,54 +149,6 @@ public class Main extends Activity {
         Intent validateIntent = new Intent(this, RechercheRecette.class);
         startActivity(validateIntent);
     }
-
-
-    /**
-     *  Launch the Dialog to add a new ingredient
-     * */
-    public void addPopup(View view) {
-        //DialogFragment dialog = new ScanAlertDialog();
-        //dialog.show(getFragmentManager(), "tag");
-
-        if (mPopupView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mPopupView = inflater.inflate(R.layout.add_popup, null, false);
-
-            //LIST RESULT
-            ListView resultListView = (ListView) mPopupView.findViewById(R.id.list_proposal);
-            mArrayAdapterResult = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mResultList);
-            resultListView.setAdapter(mArrayAdapterResult);
-
-
-            resultListView.setOnItemClickListener(new ListView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    pushAddButton(mResultList.get(position), true);
-                }
-            });
-        }
-
-        mPopup = new PopupWindow(
-                mPopupView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                true
-        );
-
-        mPopup.setOutsideTouchable(true);
-        mPopup.showAtLocation(this.findViewById(R.id.main), Gravity.CENTER,
-                0, 0);
-    }
-
-    /*
-    public void addAliment(View view) {
-        EditText addAlimentText = (EditText) mPopupView.findViewById(R.id.add_aliment_text);
-        pushAddButton(addAlimentText.getText().toString(), false);
-        addAlimentText.setText("");
-
-        mPopup.dismiss();
-    }*/
-
-
 
     /**
      * Launch dialog to scan and add new ingredient
@@ -220,10 +170,6 @@ public class Main extends Activity {
     public void addPopup_manual(View view) {
         addPopup_manual();
     }
-
-
-
-
 
     /**
      * Add aliment to the current list, and to the database
@@ -314,17 +260,9 @@ public class Main extends Activity {
         }
     }
 
-    /*
-     * Called by asyncTask to reinitialize the current barcode
-     */
-    public void changeBarCode()
-    {
-        mCurrentBarCode = null;
-    }
-
-    /*
+    /**
      *  Populate mNameList with the elements in the FOOD_TABLE
-     */
+     **/
     private ArrayList<String> getResults() {
         ArrayList<String> resultList = new ArrayList<String>();
         DatabaseHelper db = new DatabaseHelper(this); //my database helper file
@@ -364,14 +302,13 @@ public class Main extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu topMenu)
     {
-        //inflate the menu_home to use in the action bar
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_scanner,topMenu);
         return super.onCreateOptionsMenu(topMenu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()) {
             case R.id.action_home: finish();
             case R.id.action_favoris: {
