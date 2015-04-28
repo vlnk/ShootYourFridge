@@ -3,6 +3,8 @@ package com.project.SYF;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.*;
 
@@ -122,5 +124,14 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
 
         Toast mtoast = Toast.makeText(getApplicationContext(), toToastString, Toast.LENGTH_SHORT);
         mtoast.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu topMenu)
+    {
+        //inflate the menu to use in the action bar
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, topMenu);
+        return super.onCreateOptionsMenu(topMenu);
     }
 }

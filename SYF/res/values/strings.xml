@@ -22,5 +22,8 @@
     <string name="aliment_name_view">Name: </string>
     <string name="aliment_code">Code: </string>
 
-</resources>
+    <string name="action_overflow">Naviguer</string>
+    <string name="action_home">Home</string>
+    <string name="action_scanner">Scanner</string>
 
+</resources>

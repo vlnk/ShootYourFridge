@@ -5,6 +5,8 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+
+import android.view.*;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -19,7 +21,6 @@ import google.zxing.integration.android.IntentIntegrator;
 import google.zxing.integration.android.IntentResult;
 import android.content.Intent;
 import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -357,6 +358,26 @@ public class Main extends Activity {
                     "Scan Id: " + cn.getScanId();
             // Writing Contacts to log
             Log.d("Name: ", log);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu topMenu)
+    {
+        //inflate the menu to use in the action bar
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu,topMenu);
+        return super.onCreateOptionsMenu(topMenu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_home: finish();
+            case R.id.action_scanner:
+            default:
+
+            return super.onOptionsItemSelected(item);
         }
     }
 }
