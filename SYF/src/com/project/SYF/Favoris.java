@@ -124,16 +124,16 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_home: finish();
+            case R.id.action_home: finish(); break;
             case R.id.action_scanner: {
                 Intent validateIntent = new Intent(this, Main.class);
                 startActivity(validateIntent);
+                break;
             }
 
-            default:
-
-            return super.onOptionsItemSelected(item);
+            default: break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
 

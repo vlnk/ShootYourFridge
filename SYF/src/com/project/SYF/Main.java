@@ -310,14 +310,14 @@ public class Main extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()) {
-            case R.id.action_home: finish();
+            case R.id.action_home: finish(); break;
             case R.id.action_favoris: {
                 Intent validateIntent = new Intent(this, Favoris.class);
                 startActivity(validateIntent);
+                break;
             }
-            default:
-
-            return super.onOptionsItemSelected(item);
+            default: break;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

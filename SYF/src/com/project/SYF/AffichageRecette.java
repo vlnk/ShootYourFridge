@@ -142,16 +142,17 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
             case R.id.action_home: {
                 Intent validateIntent = new Intent(AffichageRecette.this, Home.class);
                 startActivity(validateIntent);
+                break;
             }
             case R.id.action_scanner: {
                 Intent validateIntent = new Intent(AffichageRecette.this, Main.class);
                 startActivity(validateIntent);
+                break;
             }
-            case R.id.action_back: finish();
+            case R.id.action_back: finish(); break;
 
-            default:
-
-            return super.onOptionsItemSelected(item);
+            default: break;
         }
+        return super.onOptionsItemSelected(item);
     }
 }
