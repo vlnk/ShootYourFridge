@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:layout_margin="20dp">
+
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="50dp"
+                  android:text="@string/scan_popup_title"
+                  android:gravity="center_horizontal|center_vertical"
+                  android:background="@color/syf_yellow"
+                  android:textStyle="bold"
+                  android:textSize="20sp"/>
+
+
+        <ListView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/list_proposal"
+                android:layout_weight="0">
+
+        </ListView>
+
+        <TextView android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/scan_popup_message"
+                  android:gravity="center_horizontal|center_vertical"
+                  android:background="@color/syf_yellow"
+                  android:textStyle="bold"
+                  android:textSize="20sp"
+                  android:layout_gravity="bottom"
+                  android:layout_weight="1"/>
+
+    </LinearLayout>
+</RelativeLayout>
