@@ -44,17 +44,23 @@ public class Home extends Activity implements View.OnClickListener{
      public boolean onCreateOptionsMenu(Menu topMenu) {
         //inflate the menu to use in the action bar
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu,topMenu);
+        menuInflater.inflate(R.menu.menu_home,topMenu);
         return super.onCreateOptionsMenu(topMenu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.action_home:
-            case R.id.action_scanner: Intent validateIntent = new Intent(this, Main.class);
-                                    startActivity(validateIntent);
-            default:
+            case R.id.action_favoris: {
+                Intent validateIntent = new Intent(this, Favoris.class);
+                startActivity(validateIntent);
+            }
+            case R.id.action_scanner: {
+                Intent validateIntent = new Intent(this, Main.class);
+                startActivity(validateIntent);
+            }
+
+            default:{}
 
             return super.onOptionsItemSelected(item);
         }

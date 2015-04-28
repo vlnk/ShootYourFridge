@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 
@@ -129,9 +130,28 @@ public class AffichageRecette extends Activity implements View.OnClickListener{
     @Override
     public boolean onCreateOptionsMenu(Menu topMenu)
     {
-        //inflate the menu to use in the action bar
+        //inflate the menu_home to use in the action bar
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, topMenu);
+        menuInflater.inflate(R.menu.menu_affichage, topMenu);
         return super.onCreateOptionsMenu(topMenu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_home: {
+                Intent validateIntent = new Intent(AffichageRecette.this, Home.class);
+                startActivity(validateIntent);
+            }
+            case R.id.action_scanner: {
+                Intent validateIntent = new Intent(AffichageRecette.this, Main.class);
+                startActivity(validateIntent);
+            }
+            case R.id.action_back: finish();
+
+            default:
+
+            return super.onOptionsItemSelected(item);
+        }
     }
 }

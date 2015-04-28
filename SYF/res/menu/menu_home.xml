@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_navigate"
+          android:icon="@drawable/ic_action_overflow"
+          android:title="@string/action_overflow"
+          android:showAsAction="always" >
+        <menu>
+            <item android:id="@+id/action_favoris"
+                  android:title="@string/action_favoris"
+                  android:showAsAction="always" />
+            <item android:id="@+id/action_scanner"
+                  android:title="@string/action_scanner"
+                  android:showAsAction="always" />
+        </menu>
+    </item>
+
+</menu>
