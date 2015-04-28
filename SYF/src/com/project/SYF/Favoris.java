@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.project.SYF.dialogs.DeleteFavorisCheckAlertDialog;
@@ -114,10 +115,25 @@ public class Favoris extends ListActivity implements AdapterView.OnItemClickList
     @Override
     public boolean onCreateOptionsMenu(Menu topMenu)
     {
-        //inflate the menu to use in the action bar
+        //inflate the menu_home to use in the action bar
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu,topMenu);
+        menuInflater.inflate(R.menu.menu_favoris,topMenu);
         return super.onCreateOptionsMenu(topMenu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_home: finish();
+            case R.id.action_scanner: {
+                Intent validateIntent = new Intent(this, Main.class);
+                startActivity(validateIntent);
+            }
+
+            default:
+
+            return super.onOptionsItemSelected(item);
+        }
     }
 
 

@@ -364,9 +364,9 @@ public class Main extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu topMenu)
     {
-        //inflate the menu to use in the action bar
+        //inflate the menu_home to use in the action bar
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu,topMenu);
+        menuInflater.inflate(R.menu.menu_scanner,topMenu);
         return super.onCreateOptionsMenu(topMenu);
     }
 
@@ -374,7 +374,10 @@ public class Main extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_home: finish();
-            case R.id.action_scanner:
+            case R.id.action_favoris: {
+                Intent validateIntent = new Intent(this, Favoris.class);
+                startActivity(validateIntent);
+            }
             default:
 
             return super.onOptionsItemSelected(item);

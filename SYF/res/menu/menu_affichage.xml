@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_navigate"
+          android:icon="@drawable/ic_action_overflow"
+          android:title="@string/action_overflow"
+          android:showAsAction="always" >
+        <menu>
+            <item android:id="@+id/action_home"
+                  android:title="@string/action_home"
+                  android:showAsAction="always" />
+            <item android:id="@+id/action_scanner"
+                  android:title="@string/action_scanner"
+                  android:showAsAction="always" />
+            <item android:id="@+id/action_back"
+                  android:title="@string/action_back"
+                  android:showAsAction="always" />
+        </menu>
+    </item>
+
+</menu>
