@@ -34,13 +34,14 @@ public class ScanAlertDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Main activity = (Main) getActivity();
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Get the layout inflater
+        LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        builder.setTitle("Scanning results")
-                .setMessage("Choose in the list below the best description " +
-                        "for your product, by clicking on it");
-        ListView list = new ListView(getActivity());
+        View scanDialogView = inflater.inflate(R.layout.scan_popup, null);
+        builder.setView(scanDialogView);
+
+        ListView list = (ListView) scanDialogView.findViewById(R.id.list_proposal);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity()
                 , android.R.layout.simple_list_item_1, android.R.id.text1,
@@ -60,7 +61,5 @@ public class ScanAlertDialog extends DialogFragment {
         builder.setView(list);
 
         return builder.create();
-
     }
-
 }

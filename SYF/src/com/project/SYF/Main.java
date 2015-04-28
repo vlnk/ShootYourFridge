@@ -161,7 +161,7 @@ public class Main extends Activity {
 
         if (mPopupView == null) {
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            mPopupView = inflater.inflate(R.layout.add_popup, null, false);
+            mPopupView = inflater.inflate(R.layout.scan_popup, null, false);
 
             //LIST RESULT
             ListView resultListView = (ListView) mPopupView.findViewById(R.id.list_proposal);

@@ -27,21 +27,25 @@
                   android:layout_height="wrap_content"
                   android:weightSum="2"
                   android:gravity="bottom|end"
-                  android:orientation="horizontal">
+                  android:orientation="horizontal"
+                  android:background="@android:color/black">
 
         <Button android:layout_width="0dp"
-                android:background="@color/syf_red"
+                android:background="@color/syf_orange"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/scan_button"
-                android:onClick="scan"/>
+                android:text="@string/scan_popup_title"
+                android:onClick="scan"
+                android:layout_marginRight="1dp"/>
 
 
         <Button android:layout_width="0dp"
+                android:background="@color/syf_orange"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/add_button"
-                android:onClick="addPopup_manual"/>
+                android:onClick="addPopup_manual"
+                android:layout_marginLeft="1dp"/>
     </LinearLayout>
 
 
