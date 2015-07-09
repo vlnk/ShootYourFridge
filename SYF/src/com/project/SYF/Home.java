@@ -3,6 +3,7 @@ package com.project.SYF;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,17 +53,19 @@ public class Home extends Activity implements View.OnClickListener{
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.action_favoris: {
+                Log.i("go favoris", "hihihi");
                 Intent validateIntent = new Intent(this, Favoris.class);
                 startActivity(validateIntent);
+                break;
             }
             case R.id.action_scanner: {
+                Log.i("go scanner", "herherher");
                 Intent validateIntent = new Intent(this, Main.class);
                 startActivity(validateIntent);
+                break;
             }
-
-            default:{}
-
-            return super.onOptionsItemSelected(item);
+            default: break;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

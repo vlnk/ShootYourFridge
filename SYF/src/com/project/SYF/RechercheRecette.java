@@ -154,17 +154,18 @@ public class RechercheRecette extends ListActivity implements AdapterView.OnItem
             case R.id.action_home: {
                 Intent validateIntent = new Intent(RechercheRecette.this, Home.class);
                 startActivity(validateIntent);
+                break;
             }
-            case R.id.action_scanner: finish();
+            case R.id.action_scanner: finish(); break;
             case R.id.action_favoris: {
                 Intent validateIntent = new Intent(this, Favoris.class);
                 startActivity(validateIntent);
+                break;
             }
 
 
-            default:
-
-            return super.onOptionsItemSelected(item);
+            default:break;
         }
+        return super.onOptionsItemSelected(item);
     }
 }
