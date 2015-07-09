@@ -50,7 +50,7 @@ public class ManualAlertDialog extends DialogFragment {
             }
         });
 
-        mDialog = builder.create();
+        Dialog mDialog = builder.create();
         return mDialog;
     }
 }
