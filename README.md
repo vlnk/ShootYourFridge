@@ -1,6 +1,9 @@
 # README #
 
-The wonderfull project leaded by Michèle, Robin, Hélias and Valentin is very very very wonderful.
+Application Android de recherche d'aliments à partir de code-barre scannés au préalable.
+
+## Auteurs
+Michèle, Robin, Hélias and Valentin.
 
 ## Ce qui est déjà fait
 - Build de l'application Android (compatibilité ?)
