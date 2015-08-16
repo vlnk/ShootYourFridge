@@ -1,6 +1,6 @@
 # README #
 
-Application Android de recherche d'aliments à partir de code-barre scannés au préalable.
+Application Android de recherche d'aliments à partir de code-barres scannés au préalable.
 
 ## Auteurs
 Michèle, Robin, Hélias and Valentin.
